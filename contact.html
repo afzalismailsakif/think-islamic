@@ -83,6 +83,7 @@
                 display: flex;
             }
         }
+        
         body {
             margin: 0;
             font-family: 'Arial', sans-serif;
@@ -150,9 +151,9 @@
     <nav>
         <div class="nav-logo">Think Islamic</div>
         <ul class="nav-links">
-           <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="contact.html">Contact</a></li>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
         </ul>
         <div class="hamburger" onclick="toggleMobileNav()">
             <div></div>
@@ -160,11 +161,20 @@
             <div></div>
         </div>
     </nav>
+
+    <!-- Mobile Navigation -->
     <ul class="mobile-nav" id="mobileNav">
         <li><a href="index.html">Home</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="contact.html">Contact</a></li>
     </ul>
+
+<script>
+        function toggleMobileNav() {
+            var mobileNav = document.getElementById("mobileNav");
+            mobileNav.classList.toggle("show");
+        }
+    </script>
 
     <header class="header">
         <h1>Contact Us</h1>

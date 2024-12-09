@@ -83,6 +83,7 @@
                 display: flex;
             }
         }
+
         body {
             margin: 0;
             font-family: 'Arial', sans-serif;
@@ -91,39 +92,47 @@
             line-height: 1.6;
             text-align: center;
         }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
+
         .header {
             padding: 30px 20px;
             background: #1b262c;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
+
         .header h1 {
             font-size: 2.5rem;
             margin: 0;
             color: #ffd369;
         }
+
         .header p {
             font-size: 1.2rem;
             margin-top: 10px;
             color: #ffffff;
         }
+
         .content {
             margin-top: 40px;
         }
+
         .content h2 {
             font-size: 2rem;
             color: #ffd369;
             margin-bottom: 20px;
         }
+
         .content p {
             font-size: 1.1rem;
             margin: 10px 0;
         }
+
         .cta {
             margin-top: 30px;
             background: #ffd369;
@@ -135,9 +144,11 @@
             text-decoration: none;
             transition: background 0.3s;
         }
+
         .cta:hover {
             background: #f7c800;
         }
+
         footer {
             margin-top: 50px;
             padding: 20px;
@@ -146,19 +157,21 @@
             font-size: 0.9rem;
             text-align: center;
         }
+
         footer p {
             margin: 0;
         }
     </style>
 </head>
 <body>
+
     <!-- Navigation Bar -->
     <nav>
         <div class="nav-logo">Think Islamic</div>
         <ul class="nav-links">
-           <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="contact.html">Contact</a></li>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
         </ul>
         <div class="hamburger" onclick="toggleMobileNav()">
             <div></div>
@@ -166,6 +179,8 @@
             <div></div>
         </div>
     </nav>
+
+    <!-- Mobile Navigation -->
     <ul class="mobile-nav" id="mobileNav">
         <li><a href="index.html">Home</a></li>
         <li><a href="about.html">About</a></li>
@@ -201,6 +216,13 @@
     <footer>
         <p>© 2024 Md. Afzal Ismail. All rights reserved.</p>
     </footer>
+
+    <script>
+        function toggleMobileNav() {
+            var mobileNav = document.getElementById("mobileNav");
+            mobileNav.classList.toggle("show");
+        }
+    </script>
 
 </body>
 </html>

@@ -5,6 +5,85 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Think Islamic</title>
     <style>
+    /* Navbar Styles */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background: linear-gradient(90deg, #3b5998, #162447);
+            color: white;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            font-size: 1rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #ffa726;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+
+        .hamburger div {
+            width: 25px;
+            height: 3px;
+            background-color: white;
+        }
+
+        .mobile-nav {
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            list-style: none;
+            padding: 10px 20px;
+            background: #3b5998;
+        }
+
+        .mobile-nav a {
+            text-decoration: none;
+            color: white;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        .mobile-nav a:hover {
+            color: #ffa726;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .mobile-nav.show {
+                display: flex;
+            }
+        }
+        
         /* General Styles */
         body {
             margin: 0;
@@ -107,10 +186,32 @@
     </style>
 </head>
 <body>
+    
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="nav-logo">Think Islamic</div>
+        <ul class="nav-links">
+           <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <div class="hamburger" onclick="toggleMobileNav()">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </nav>
+    <ul class="mobile-nav" id="mobileNav">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+    </ul>
+    
     <div class="animated-bg"></div>
     <h1>Quranic Guidance Based on Your Mood</h1>
     <div class="dropdown-container">
-        <label for="mood-selector">Select your mood:</label><p> </p>
+        <label for="mood-selector">Select your mood:</label> <p></p>
+
         <select id="mood-selector" onchange="displayVerses()">
             <option value="" disabled selected>Select Mood</option>
             <option value="happy">Happy</option>
@@ -206,6 +307,11 @@
             arabic: "وَلَا تَهِنُوا۟ وَلَا تَحْزَنُوٓا۟ وَأَنتُمُ ٱلْأَعْلَوْنَ إِن كُنتُم مُّؤْمِنِينَ",
             bangla: "তোমরা দুর্বল হয়ো না এবং দুঃখিতও হয়ো না; যদি তোমরা ঈমানদার হও তবে তোমরাই বিজয়ী হবে।",
             english: "So do not weaken and do not grieve, and you will be superior if you are [true] believers. (Surah Al-Imran 3:139)"
+        },
+        {
+            arabic: "إِنَّ مَعَ ٱلْعُسْرِ يُسْرًا",
+            bangla: "নিশ্চয়ই কষ্টের সাথে রয়েছে স্বস্তি।",
+            english: "Indeed, with hardship [will be] ease. (Surah Ash-Sharh 94:6)"
         },
         {
             arabic: "وَٱصْبِرْ وَمَا صَبْرُكَ إِلَّا بِٱللَّهِ وَلَا تَحْزَنْ عَلَيْهِمْ وَلَا تَكُ فِى ضَيْقٍۢ مِّمَّا يَمْكُرُونَ",

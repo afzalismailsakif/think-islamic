@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hadith of the Day</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #0f4c75;
+            color: #f9f9f9;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden; /* Prevent scrollbars during animation */
+        }
+
+        header {
+            width: 100%;
+            background: linear-gradient(90deg, #3b5998, #162447);
+            padding: 10px 0;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ffffff;
+            margin-left: 20px;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #ffffff;
+            font-size: 1rem;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #ffa726;
+        }
+
+        .container {
+            text-align: center;
+            margin-top: 80px; /* Adjusted to give space for the nav bar */
+        }
+
+        .hadith-container {
+            position: relative;
+            background-color: #3282b8;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0; /* Initially hidden */
+            transform: translateY(-100px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .hadith-container.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hadith {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .hadith-type {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .btn-generate {
+            margin-top: 20px; /* Space between button and hadith */
+            padding: 10px 20px;
+            background-color: #ffa726;
+            color: #1b262c;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-generate:hover {
+            background-color: #f7c800;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #1b262c;
+            padding: 10px 0;
+            text-align: center;
+            color: #ffffff;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background: #162447;
+                text-align: center;
+                z-index: 999;
+            }
+
+            .nav-links.active {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .nav-links li {
+                margin: 10px 0;
+            }
+
+            .nav-logo {
+                margin-left: 10px;
+            }
+
+            .hamburger {
+                display: flex;
+                flex-direction: column;
+                cursor: pointer;
+                margin-right: 20px;
+            }
+
+            .hamburger div {
+                width: 25px;
+                height: 3px;
+                background-color: #ffffff;
+                margin: 3px 0;
+                transition: transform 0.3s, background-color 0.3s;
+            }
+
+            .hamburger.active div:nth-child(1) {
+                transform: translateY(8px) rotate(45deg);
+            }
+
+            .hamburger.active div:nth-child(2) {
+                opacity: 0;
+            }
+
+            .hamburger.active div:nth-child(3) {
+                transform: translateY(-8px) rotate(-45deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="nav-logo">Think Islamic</div>
+        <nav>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+            <div class="hamburger" onclick="toggleMobileNav()">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="hadith-container" id="hadithContainer">
+                <p class="hadith-type">Hadith of the Day</p>
+                <p class="hadith" id="hadithText"></p>
+            </div>
+            <button class="btn-generate" onclick="displayRandomHadith()">Generate Hadith of the Day</button>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2024 Md. Afzal Ismail. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Array of Hadiths
+        const hadiths = [
+            "Verily, actions are judged by their intentions. - Sahih Bukhari",
+            "The strong person is not the one who can wrestle someone else down. The strong person is the one who can control himself when he is angry. - Sahih al-Bukhari",
+            "Do not be people without minds of your own, saying that if others treat you well you will treat them well and that if they do wrong you will do wrong. Instead, accustom yourselves to do good if people do good and not to do wrong if they do evil. - Al-Tirmidhi",
+            "None of you truly believes until he wishes for his brother what he wishes for himself. - Sahih Bukhari and Muslim",
+            "Say what is true, although it may be bitter and displeasing to people. - Al-Muwatta",
+            "A good man treats women with honor. - Sahih al-Bukhari",
+            "The strong person is not the one who can wrestle someone else down. The strong person is the one who can control himself when he is angry. - Sahih al-Bukhari",
+            "The Prophet said, 'The strong person is not the one who has physical strength but the person is strong if he can control his anger.' - Sahih al-Bukhari",
+            "The Prophet said, 'None of you will have faith till he wishes for his (Muslim) brother what he likes for himself.' - Sahih al-Bukhari",
+            "The Prophet said, 'A Muslim is the one who avoids harming Muslims with his tongue and hands. And a Muhajir (emigrant) is the one who gives up (abandons) all what Allah has forbidden.' - Sahih al-Bukhari",
+"The best of you are those who are best to their families. - Tirmidhi",
+"The strong person is not the one who can wrestle others down. The strong person is the one who can control himself when he is angry. - Bukhari",
+"Whoever believes in Allah and the Last Day should speak good or remain silent.- Muslim",
+"None of you truly believes until he loves for his brother what he loves for himself. - Bukhari and Muslim",
+"The believer does not taunt others, he does not curse others, he does not use profanity, and he does not abuse others.- Tirmidhi",
+"A man's spending on his family is a deed of charity. - Bukhari and Muslim",
+"Modesty is part of faith. - Muslim",
+"The best of you are those who are best in character. - Tabarani",
+"Do not be people without minds of your own, saying that if others treat you well you will treat them well, and that if they do wrong you will do wrong. Instead, accustom yourselves to do good if people do good and not to do wrong if they do evil. - Tirmidhi",
+"The best of you are those who are best to their families. - Tirmidhi",
+"The strong person is not the one who can wrestle others down. The strong person is the one who can control himself when he is angry. - Bukhari",
+"Whoever believes in Allah and the Last Day should speak good or remain silent. - Muslim",
+"None of you truly believes until he loves for his brother what he loves for himself.- Bukhari and Muslim",
+"The believer does not taunt others, he does not curse others, he does not use profanity, and he does not abuse others. - Tirmidhi",
+"A man's spending on his family is a deed of charity.- Bukhari and Muslim",
+"The best of you are those who are best in character.- Tabarani",
+"Do not be people without minds of your own, saying that if others treat you well you will treat them well, and that if they do wrong you will do wrong. Instead, accustom yourselves to do good if people do good and not to do wrong if they do evil.- Tirmidhi",
+"Allah does not look at your appearance or wealth, but rather He looks at your hearts and deeds. - Muslim",
+"The most beloved of people to Allah are those who are most beneficial to people. - Tabarani",
+"Do not backbite one another.- Bukhari and Muslim",
+"Seeking knowledge is an obligation upon every Muslim.- Ibn Majah",
+"The best charity is that given in Ramadan. - Tirmidhi",
+"None of you truly believes until he wishes for his brother what he wishes for himself. - Bukhari and Muslim",
+"The worst of guardians is a harsh ruler. Beware of becoming one of them. -Muslim",
+"Speak good words or remain silent. - Bukhari and Muslim",
+"Do not get angry. - Bukhari",
+"A person's true wealth is the good he does in this world. - Muslim",
+"The Messenger of Allah (ﷺ) said, 'Do not envy one another, do not hate one another, do not turn away from one another, and do not undercut one another, but be you, O servants of Allah, brothers. A Muslim is the brother of a Muslim: he does not oppress him, nor does he fail him, nor does he lie to him, nor does he hold him in contempt.' - Muslim",
+"The most complete believer in faith is the one with the best character. - Tirmidhi",
+"The reward of deeds depends upon the intentions and every person will get the reward according to what he has intended. - Bukhari and Muslim",
+"The strong is not the one who overcomes the people by his strength, but the strong is the one who controls himself while in anger. - Bukhari and Muslim",
+"Whoever believes in Allah and the Last Day should say what is good or keep silent. - Muslim",
+"He who believes in Allah and the Last Day should honor his guest. - Bukhari and Muslim",
+"The Prophet (ﷺ) said, 'Religion is very easy and whoever overburdens himself in his religion will not be able to continue in that way. So you should not be extremists, but try to be near to perfection and receive the good tidings that you will be rewarded; and gain strength by worshipping in the mornings, the nights.' - Bukhari",
+"The Prophet (ﷺ) said, 'None of you will have faith till he wishes for his (Muslim) brother what he likes for himself.' - Bukhari and Muslim",
+"The Prophet (ﷺ) said, 'None of you should say: O Allah, forgive me if You wish, O Allah, be merciful to me if You wish, but he should always appeal to Allah with determination, for nobody can force Allah to do something against His Will.' - Bukhari",
+"The Prophet (ﷺ) said, 'If somebody recites the last two Verses of Surat Al-Baqara at night, that will be sufficient for him.' - Bukhari",
+"The Prophet (ﷺ) said, 'The worst among the people is the double-faced one; he comes to some people with one face and to others with another face.' - Bukhari",
+"The Prophet (ﷺ) said, 'Beware of suspicion, for suspicion is the worst of false tales; and do not look for the others' faults and do not spy, and do not be jealous of one another, and do not desert (cut your relation with) one another, and do not hate one another; and O Allah's worshipers! Be brothers (as Allah has ordered you)!' - Bukhari and Muslim",
+"The Prophet (ﷺ) said, 'Allah has forbidden for you, (1) to be undutiful to your mothers, (2) to bury your daughters alive, (3) to not to pay the rights of the others (e.g. charity, etc.) and (4) to beg of men (begging). - Bukhari and Muslim",
+"The Prophet (ﷺ) said, 'Facilitate things to people (concerning religious matters), and do not make it hard for them and give them good tidings and do not make them run away (from Islam). - Bukhari",
+"The Prophet (ﷺ) said, 'The most hated person in the sight of Allah is the most quarrelsome person.' - Bukhari",
+"The Prophet (ﷺ) said, 'If Allah wants to do good to somebody, He afflicts him with trials.' - Bukhari",
+"The Prophet (ﷺ) said, 'If somebody innovates something which is not in harmony with the principles of our religion, that thing is rejected.' - Bukhari and Muslim",
+"The Prophet (ﷺ) said, 'A Muslim is a brother of another Muslim, so he should not oppress him, nor should he hand him over to an oppressor. Whoever fulfilled the needs of his brother, Allah will fulfill his needs; whoever brought his (Muslim) brother out of a discomfort, Allah will bring him out of the discomforts of the Day of Resurrection, and whoever screened a Muslim, Allah will screen him on the Day of Resurrection.' - Bukhari and Muslim",
+"The Prophet (ﷺ) said, 'If one has good manners, one may attain the same level of merit as those who spend their nights in prayer.' - Bukhari",
+"The Prophet (ﷺ) said, 'Make things easy for the people, and do not make it difficult for them, and make them calm and do not repel them. - Bukhari and Muslim)",
+"The Prophet (ﷺ) said, 'The best among you are those who have the best manners and character.' - Bukhari and Muslim",
+"The Prophet (ﷺ) said, 'The most perfect believer in faith is the one whose character is finest and who is kindest to his wife.' - Tirmidhi",
+"The Prophet (ﷺ) said, 'A good word is charity.' - Bukhari and Muslim",
+"The Prophet (ﷺ) said, 'Every Muslim has to give in charity.' The people asked, 'O Allah's Messenger (ﷺ)! If someone has nothing to give, what will he do?' He said, 'He should work with his hands and benefit himself and also give in charity (from what he earns). 'The people further asked, 'If he cannot find even that?' He replied, 'He should help the needy who appeal for help.' Then the people asked, 'If he cannot do that?' He replied, 'Then he should perform good deeds and keep away from evil deeds, and that will be regarded as charitable deeds.' - Bukhari",
+"The Prophet (ﷺ) said, 'The person who helps provide a drink of water to break the fast will earn the same reward as the one who fasted without detracting from the reward of the latter in any way.'- Tirmidhi",
+"The Prophet (ﷺ) said, 'None of you truly believes until he loves for his brother what he loves for himself.' - Bukhari and Muslim",
+"The Prophet (ﷺ) said, 'Be mindful of Allah wherever you are. Follow a bad deed with a good deed to erase it, and treat people with good character.' - Tirmidhi",
+"The Prophet (ﷺ) said, 'Verily, among the believers with the most complete faith are those who have the best character, and are kindest to their families.' - Tirmidhi",
+"The Prophet (ﷺ) said, 'The strong person is not the one who overcomes people by his strength, but the one who controls himself while in anger.' - Bukhari and Muslim",
+"The Prophet (ﷺ) said, 'Do not express pleasure at the misfortune of your brother, lest Allah should bestow mercy
+        ];
+
+        const hadithElement = document.getElementById('hadithText');
+        const hadithContainer = document.getElementById('hadithContainer');
+        const navLinks = document.getElementById('navLinks');
+        const hamburger = document.querySelector('.hamburger');
+
+        function displayRandomHadith() {
+            // Randomly select one Hadith from the array
+            const randomIndex = Math.floor(Math.random() * hadiths.length);
+            const randomHadith = hadiths[randomIndex];
+
+            // Display the selected Hadith with animation
+            hadithElement.textContent = randomHadith;
+            hadithContainer.classList.add('active');
+
+            // Reset after animation (optional)
+            setTimeout(() => {
+                hadithContainer.classList.remove('active');
+            }, 10000); // 10 seconds delay (adjust as needed)
+        }
+
+        function toggleMobileNav() {
+            navLinks.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

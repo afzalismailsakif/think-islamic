@@ -1,0 +1,1660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Think Islamic</title>
+    <style>
+        /* General Styles */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: white;
+            text-align: center;
+            background: linear-gradient(to bottom right, #2C5364, #0F2027, #1C1C1C);
+            overflow-x: hidden;
+        }
+
+        h1 {
+            margin-top: 20px;
+            font-size: 2.5em;
+            color: #FFD700;
+        }
+
+        /* Dropdown Container */
+        .dropdown-container {
+            margin: 20px auto;
+            width: 90%;
+            max-width: 500px;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        /* Verses Container */
+        .verses-container {
+            margin: 20px auto;
+            padding: 20px;
+            width: 90%;
+            max-width: 800px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .verse {
+            margin: 20px 0;
+        }
+
+        .verse .arabic {
+            font-size: 1.5em;
+            color: #FFD700;
+        }
+
+        .verse .translation {
+            font-size: 1em;
+            margin: 10px 0;
+        }
+
+        /* Animated Background */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: url('') center center / cover no-repeat;
+            opacity: 0.15;
+            animation: moveBackground 20s linear infinite;
+        }
+
+        @keyframes moveBackground {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
+
+        /* Footer Section */
+        .footer {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: #FFD700;
+            font-size: 0.9em;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .verse .arabic {
+                font-size: 1.2em;
+            }
+
+            .verse .translation {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="animated-bg"></div>
+    <h1>Quranic Guidance Based on Your Mood</h1>
+    <div class="dropdown-container">
+        <label for="mood-selector">Select your mood:</label><p>
+        <select id="mood-selector" onchange="displayVerses()">
+            <option value="" disabled selected>Select Mood</option>
+            <option value="happy">Happy</option>
+            <option value="sad">Sad</option>
+            <option value="confident">Confident</option>
+            <option value="angry">Angry</option>
+            <option value="anticipation">Anticipation</option>
+            <option value="anxious">Anxious</option>
+            <option value="aroused">Aroused</option>
+            <option value="confused">Confused</option>
+            <option value="content">Content</option>
+            <option value="curious">Curious</option>
+            <option value="defeated">Defeated</option>
+            <option value="depressed">Depressed</option>
+            <option value="desire">Desire</option>
+            <option value="desperate">Desperate</option>
+            <option value="determined">Determined</option>
+            <option value="disbelief">Disbelief</option>
+            <option value="doubtful">Doubtful</option>
+            <option value="envious">Envious</option>
+            <option value="grateful">Grateful</option>
+            <option value="guilty">Guilty</option>
+            <option value="happy">Happy</option>
+            <option value="hatred">Hatred</option>
+            <option value="humiliated">Humiliated</option>
+            <option value="hurt">Hurt</option>
+            <option value="impatient">Impatient</option>
+            <option value="indecisive">Indecisive</option>
+            <option value="insecure">Insecure</option>
+            <option value="irritated">Irritated</option>
+            <option value="jealous">Jealous</option>
+            <option value="lazy">Lazy</option>
+            <option value="lonely">Lonely</option>
+            <option value="love">Love</option>
+            <option value="nervous">Nervous</option>
+            <option value="nostalgic">Nostalgic</option>
+            <option value="offended">Offended</option>
+            <option value="overwhelmed">Overwhelmed</option>
+            <option value="peaceful">Peaceful</option>
+            <option value="rage">Rage</option>
+            <option value="regretful">Regretful</option>
+            <option value="satisfied">Satisfied</option>
+            <option value="uncertain">Uncertain</option>
+            <option value="uneasy">Uneasy</option>
+            <option value="weak">Weak</option>
+            <!-- Add more moods as needed -->
+        </select>
+    </div>
+    <div class="verses-container" id="verses-container">
+        <p>Please select a mood to view Quranic verses.</p>
+    </div>
+
+    <div class="footer">
+        Developed by: Md. Afzal Ismail
+    </div>
+
+    <script>
+        const verses = {
+            happy: [
+                {
+                    arabic: "فَبِذَٰلِكَ فَلْيَفْرَحُوا۟ ۖ هُوَ خَيْرٌۭ مِّمَّا يَجْمَعُونَ",
+                    bangla: "অতএব এটা তাদের আনন্দের কারণ হওয়া উচিত। এটা তাদের জমানো সম্পদের চেয়ে উত্তম।",
+                    english: "So rejoice in the bounty and mercy of Allah; it is better than what they accumulate. (Surah Yunus 10:58)"
+                },
+                {
+            arabic: "قُلْ بِفَضْلِ ٱللَّهِ وَبِرَحْمَتِهِۦ فَبِذَٰلِكَ فَلْيَفْرَحُوا۟ ۚ هُوَ خَيْرٌۭ مِّمَّا يَجْمَعُونَ",
+            bangla: "বলুন, 'আল্লাহর অনুগ্রহ ও তার রহমত দ্বারা তারা আনন্দিত হোক। এটি তাদের সঞ্চিত সমস্ত কিছুর চেয়ে উত্তম।'",
+            english: "Say, 'In the bounty of Allah and in His mercy - in that let them rejoice; it is better than what they accumulate.' (Surah Yunus 10:58)"
+                },
+        {
+            arabic: "وَمَنْ أَحْسَنُ قَوْلًۭا مِّمَّن دَعَآ إِلَى ٱللَّهِ وَعَمِلَ صَـٰلِحًۭا وَقَالَ إِنَّنِى مِنَ ٱلْمُسْلِمِينَ",
+            bangla: "এবং তার চেয়ে উত্তম কথা আর কার হতে পারে, যে আল্লাহর প্রতি আহ্বান জানায় এবং সৎকর্ম করে এবং বলে, 'আমি মুসলিমদের একজন।'",
+            english: "And who is better in speech than one who invites to Allah, does righteousness, and says, 'Indeed, I am of the Muslims.' (Surah Fussilat 41:33)"
+        },
+        {
+            arabic: "فَٱذْكُرُونِىٓ أَذْكُرْكُمْ وَٱشْكُرُوا۟ لِى وَلَا تَكْفُرُونِ",
+            bangla: "তোমরা আমাকে স্মরণ করো, আমিও তোমাদের স্মরণ করব। এবং আমার প্রতি কৃতজ্ঞ হও এবং অকৃতজ্ঞ হয়ো না।",
+            english: "So remember Me; I will remember you. And be grateful to Me and do not deny Me. (Surah Al-Baqarah 2:152)"
+        },
+        {
+            arabic: "فَإِنَّ ٱللَّهَ لَا يُضِيعُ أَجْرَ ٱلْمُحْسِنِينَ",
+            bangla: "নিশ্চয়ই আল্লাহ সৎকর্মশীলদের পুরস্কার নষ্ট করেন না।",
+            english: "Indeed, Allah does not allow to be lost the reward of those who do good. (Surah Yusuf 12:90)"
+        }
+            ],
+            sad: [
+                {
+                    arabic: "إِنَّ مَعَ الْعُسْرِ يُسْرًا",
+                    bangla: "নিশ্চয়ই কষ্টের সাথে স্বাচ্ছন্দ রয়েছে।",
+                    english: "Indeed, with hardship [will be] ease. (Surah Ash-Sharh 94:6)"
+                },
+                {
+            arabic: "وَلَا تَهِنُوا۟ وَلَا تَحْزَنُوٓا۟ وَأَنتُمُ ٱلْأَعْلَوْنَ إِن كُنتُم مُّؤْمِنِينَ",
+            bangla: "তোমরা দুর্বল হয়ো না এবং দুঃখিতও হয়ো না; যদি তোমরা ঈমানদার হও তবে তোমরাই বিজয়ী হবে।",
+            english: "So do not weaken and do not grieve, and you will be superior if you are [true] believers. (Surah Al-Imran 3:139)"
+        },
+        {
+            arabic: "إِنَّ مَعَ ٱلْعُسْرِ يُسْرًا",
+            bangla: "নিশ্চয়ই কষ্টের সাথে রয়েছে স্বস্তি।",
+            english: "Indeed, with hardship [will be] ease. (Surah Ash-Sharh 94:6)"
+        },
+        {
+            arabic: "وَٱصْبِرْ وَمَا صَبْرُكَ إِلَّا بِٱللَّهِ وَلَا تَحْزَنْ عَلَيْهِمْ وَلَا تَكُ فِى ضَيْقٍۢ مِّمَّا يَمْكُرُونَ",
+            bangla: "ধৈর্য ধারণ কর এবং তোমার ধৈর্য আল্লাহর জন্যই। তাদের জন্য দুঃখিত হয়ো না এবং তাদের ষড়যন্ত্রের কারণে মনঃক্ষুণ্ণ হয়ো না।",
+            english: "And be patient, for your patience is with Allah. And do not grieve over them and do not be in distress over what they conspire. (Surah An-Nahl 16:127)"
+        },
+        {
+            arabic: "وَقُل جَآءَ ٱلْحَقُّ وَزَهَقَ ٱلْبَٰطِلُ إِنَّ ٱلْبَٰطِلَ كَانَ زَهُوقًۭا",
+            bangla: "বলুন, 'সত্য এসেছে এবং মিথ্যা বিলীন হয়েছে; নিশ্চয়ই মিথ্যা বিলীন হওয়ারই জন্য।'",
+            english: "And say, 'Truth has come, and falsehood has departed. Indeed, falsehood is [by nature] ever bound to depart.' (Surah Al-Isra 17:81)"
+        },
+        {
+            arabic: "إِنَّ ٱللَّهَ مَعَ ٱلصَّـٰبِرِينَ",
+            bangla: "নিশ্চয়ই আল্লাহ ধৈর্যশীলদের সাথে আছেন।",
+            english: "Indeed, Allah is with the patient. (Surah Al-Baqarah 2:153)"
+        }
+            ],
+            confident: [
+                {
+                    arabic: "فَإِنَّ مَعَ الْعُسْرِ يُسْرًا إِنَّ مَعَ الْعُسْرِ يُسْرًا",
+                    bangla: "নিশ্চয়ই প্রতিটি কষ্টের পরে স্বাচ্ছন্দ আসে।",
+                    english: "For indeed, with hardship [will be] ease. Indeed, with hardship [will be] ease. (Surah Ash-Sharh 94:5-6)"
+                },
+                {
+            arabic: "فَإِذَا عَزَمْتَ فَتَوَكَّلْ عَلَى ٱللَّهِ ۚ إِنَّ ٱللَّهَ يُحِبُّ ٱلْمُتَوَكِّلِينَ",
+            bangla: "যখন তুমি দৃঢ় সংকল্প করো, তখন আল্লাহর ওপর ভরসা করো। নিশ্চয়ই আল্লাহ ভরসাকারীদের ভালোবাসেন।",
+            english: "And when you have decided, then rely upon Allah. Indeed, Allah loves those who rely [upon Him]. (Surah Aal-Imran 3:159)"
+        },
+        {
+            arabic: "إِن يَنصُرْكُمُ ٱللَّهُ فَلَا غَالِبَ لَكُمْ ۖ وَإِن يَخْذُلْكُمْ فَمَن ذَا ٱلَّذِى يَنصُرُكُم مِّنۢ بَعْدِهِۦ ۗ وَعَلَى ٱللَّهِ فَلْيَتَوَكَّلِ ٱلْمُؤْمِنُونَ",
+            bangla: "যদি আল্লাহ তোমাদের সাহায্য করেন, তবে কেউ তোমাদের পরাজিত করতে পারবে না। আর যদি তিনি তোমাদের সহায়তা না করেন, তবে তার পর কেউ তোমাদের সাহায্য করতে পারবে না। সুতরাং, মুমিনরা যেন আল্লাহর ওপরই ভরসা করে।",
+            english: "If Allah should aid you, no one can overcome you; but if He should forsake you, who is there that can aid you after Him? And upon Allah let the believers rely. (Surah Aal-Imran 3:160)"
+        },
+        {
+            arabic: "إِنَّ رَبِّى عَلَىٰ كُلِّ شَىْءٍ حَفِيظٌۭ",
+            bangla: "নিশ্চয়ই আমার প্রতিপালক সবকিছুর সংরক্ষক।",
+            english: "Indeed, my Lord is Guardian over all things. (Surah Hud 11:57)"
+        },
+        {
+            arabic: "فَلَا تَخَافُوهُمْ وَخَافُونِ إِن كُنتُم مُّؤْمِنِينَ",
+            bangla: "তোমরা তাদের ভয় করো না বরং আমাকে ভয় করো, যদি তোমরা মুমিন হও।",
+            english: "So fear them not, but fear Me, if you are [true] believers. (Surah Aal-Imran 3:175)"
+        },
+        {
+            arabic: "وَمَا تَوْفِيقِىٓ إِلَّا بِٱللَّهِ ۚ عَلَيْهِ تَوَكَّلْتُ وَإِلَيْهِ أُنِيبُ",
+            bangla: "আমার সফলতা শুধুমাত্র আল্লাহর মাধ্যমে। আমি তার ওপর ভরসা করি এবং তারই দিকে ফিরে যাই।",
+            english: "And my success is not but through Allah. Upon Him I have relied, and to Him I return. (Surah Hud 11:88)"
+        }
+            ],
+            angry: [
+                {
+            arabic: "وَٱلْكَـٰظِمِينَ ٱلْغَيْظَ وَٱلْعَافِينَ عَنِ ٱلنَّاسِ ۗ وَٱللَّهُ يُحِبُّ ٱلْمُحْسِنِينَ",
+            bangla: "যারা রাগ সংবরণ করে এবং মানুষের প্রতি ক্ষমা প্রদর্শন করে। নিশ্চয়ই আল্লাহ সৎকর্মশীলদের ভালোবাসেন।",
+            english: "And those who restrain anger and pardon people - and Allah loves the doers of good. (Surah Aal-Imran 3:134)"
+        },
+        {
+            arabic: "وَلَا تَسْتَوِى ٱلْحَسَنَةُ وَلَا ٱلسَّيِّئَةُ ٱدْفَعْ بِٱلَّتِى هِىَ أَحْسَنُ فَإِذَا ٱلَّذِى بَيْنَكَ وَبَيْنَهُۥ عَدَٰوَةٌۭ كَأَنَّهُۥ وَلِىٌّ حَمِيمٌۭ",
+            bangla: "সৎকর্ম ও অসৎকর্ম সমান হতে পারে না। তুমি অসৎকর্মকে এমন পদ্ধতিতে প্রতিহত কর যা উত্তম, তাহলে তোমার মধ্যে ও তার মধ্যে যে শত্রুতা আছে, তা যেন অন্তরঙ্গ বন্ধুত্বে পরিণত হয়।",
+            english: "And not equal are the good deed and the bad. Repel [evil] by that [deed] which is better; and thereupon the one whom between you and him is enmity [will become] as though he was a devoted friend. (Surah Fussilat 41:34)"
+        },
+        {
+            arabic: "وَإِذَا خَاطَبَهُمُ ٱلْجَـٰهِلُونَ قَالُوا۟ سَلَـٰمًا",
+            bangla: "যখন অজ্ঞরা তাদের সাথে কথা বলে, তখন তারা বলে, 'শান্তি।'",
+            english: "And when the ignorant address them [harshly], they say [words of] peace. (Surah Al-Furqan 25:63)"
+        },
+        {
+            arabic: "وَلَا تَسْتَعْجِلْ لَهُمْ ۖ إِنَّمَا نَعُدُّ لَهُمْ عَدًّا",
+            bangla: "তাদের ব্যাপারে তাড়াহুড়ো করো না। আমরা তাদের জন্য নির্ধারিত গণনা করছি।",
+            english: "So be not impatient over them. We are only counting out to them a [limited] number. (Surah Maryam 19:84)"
+        },
+        {
+            arabic: "يَـٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوا۟ ٱتَّقُوا۟ ٱللَّهَ وَقُولُوا۟ قَوْلًۭا سَدِيدًۭا",
+            bangla: "হে ঈমানদারগণ! আল্লাহকে ভয় করো এবং সঠিক কথা বলো।",
+            english: "O you who have believed, fear Allah and speak words of appropriate justice. (Surah Al-Ahzab 33:70)"
+        }
+            ],
+            anticipation: [
+        {
+            arabic: "وَعَسَىٰٓ أَن تَكْرَهُوا۟ شَيْـًۭٔا وَهُوَ خَيْرٌۭ لَّكُمْ ۖ وَعَسَىٰٓ أَن تُحِبُّوا۟ شَيْـًۭٔا وَهُوَ شَرٌّۭ لَّكُمْ ۗ وَٱللَّهُ يَعْلَمُ وَأَنتُمْ لَا تَعْلَمُونَ",
+            bangla: "এমনও হতে পারে যে, তোমরা কোন জিনিস অপছন্দ কর অথচ তা তোমাদের জন্যে মঙ্গলকর। এবং এমনও হতে পারে যে, তোমরা কোন জিনিস পছন্দ কর অথচ তা তোমাদের জন্যে অমঙ্গলকর। আর আল্লাহ জানেন, তোমরা জান না।",
+            english: "But perhaps you hate a thing, and it is good for you; and perhaps you love a thing, and it is bad for you. And Allah knows, while you know not. (Surah Al-Baqarah 2:216)"
+        },
+        {
+            arabic: "إِنَّهُۥ لَا يَيْـَٔسُ مِن رَّوْحِ ٱللَّهِ إِلَّا ٱلْقَوْمُ ٱلْكَـٰفِرُونَ",
+            bangla: "আল্লাহর রহমতের প্রতি শুধু অবিশ্বাসীরাই নিরাশ হয়।",
+            english: "Indeed, no one despairs of relief from Allah except the disbelieving people. (Surah Yusuf 12:87)"
+        },
+        {
+            arabic: "فَإِنَّ مَعَ ٱلْعُسْرِ يُسْرًا",
+            bangla: "নিশ্চয়ই কষ্টের সাথে স্বাচ্ছন্দ রয়েছে।",
+            english: "Indeed, with hardship [will be] ease. (Surah Ash-Sharh 94:6)"
+        },
+        {
+            arabic: "قُلْ يَـٰعِبَادِىَ ٱلَّذِينَ أَسْرَفُوا۟ عَلَىٰٓ أَنفُسِهِمْ لَا تَقْنَطُوا۟ مِن رَّحْمَةِ ٱللَّهِ",
+            bangla: "বলো, হে আমার বান্দারা যারা নিজেদের প্রতি বাড়াবাড়ি করেছ, তোমরা আল্লাহর রহমত থেকে নিরাশ হয়ো না।",
+            english: "Say, 'O My servants who have transgressed against themselves [by sinning], do not despair of the mercy of Allah.' (Surah Az-Zumar 39:53)"
+        }
+    ],
+    anxious: [
+        {
+            arabic: "لَا تَحْزَنْ إِنَّ ٱللَّهَ مَعَنَا",
+            bangla: "দুঃখিত হয়ো না; নিশ্চয়ই আল্লাহ আমাদের সাথে আছেন।",
+            english: "Do not grieve; indeed, Allah is with us. (Surah At-Tawbah 9:40)"
+        },
+        {
+            arabic: "وَقُلْ رَّبِّ زِدْنِى عِلْمًۭا",
+            bangla: "বলুন, ‘হে আমার প্রতিপালক, আমাকে আরও জ্ঞান দাও।’",
+            english: "And say, 'My Lord, increase me in knowledge.' (Surah Taha 20:114)"
+        },
+        {
+            arabic: "فَإِنَّ مَعَ ٱلْعُسْرِ يُسْرًا إِنَّ مَعَ ٱلْعُسْرِ يُسْرًۭا",
+            bangla: "নিশ্চয়ই কষ্টের সাথে রয়েছে স্বস্তি। অবশ্যই কষ্টের সাথে রয়েছে স্বস্তি।",
+            english: "For indeed, with hardship [will be] ease. Indeed, with hardship [will be] ease. (Surah Ash-Sharh 94:5-6)"
+        },
+        {
+            arabic: "وَعَسَىٰٓ أَن تَكْرَهُوا۟ شَيْـًۭٔا وَهُوَ خَيْرٌۭ لَّكُمْ ۖ وَعَسَىٰٓ أَن تُحِبُّوا۟ شَيْـًۭٔا وَهُوَ شَرٌّۭ لَّكُمْ ۗ وَٱللَّهُ يَعْلَمُ وَأَنتُمْ لَا تَعْلَمُونَ",
+            bangla: "সম্ভবত তোমরা যা অপছন্দ কর তা তোমাদের জন্য কল্যাণকর এবং যা ভালোবাস তা তোমাদের জন্য ক্ষতিকর হতে পারে। আল্লাহ জানেন এবং তোমরা জানো না।",
+            english: "But perhaps you hate a thing, and it is good for you; and perhaps you love a thing, and it is bad for you. And Allah knows, while you know not. (Surah Al-Baqarah 2:216)"
+        },
+        {
+            arabic: "ٱلَّذِينَ ءَامَنُوا۟ وَتَطْمَئِنُّ قُلُوبُهُم بِذِكْرِ ٱللَّهِ ۗ أَلَا بِذِكْرِ ٱللَّهِ تَطْمَئِنُّ ٱلْقُلُوبُ",
+            bangla: "যারা ঈমান এনেছে এবং যাদের অন্তর আল্লাহর স্মরণে প্রশান্ত হয়। জেনে রাখো! আল্লাহর স্মরণেই অন্তর প্রশান্ত হয়।",
+            english: "Those who have believed and whose hearts are assured by the remembrance of Allah. Unquestionably, by the remembrance of Allah hearts are assured. (Surah Ar-Ra'd 13:28)"
+        }
+    ],
+    aroused: [
+        {
+            arabic: "وَمِنْ ءَايَـٰتِهِۦٓ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَٰجًۭا لِّتَسْكُنُوٓا۟ إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةًۭ وَرَحْمَةً ۚ إِنَّ فِى ذَٰلِكَ لَءَايَـٰتٍۢ لِّقَوْمٍۢ يَتَفَكَّرُونَ",
+            bangla: "তাঁর নিদর্শনসমূহের মধ্যে একটি হলো, তিনি তোমাদের জন্য তোমাদের মধ্য থেকে স্ত্রীগণ সৃষ্টি করেছেন, যাতে তোমরা তাদের কাছে প্রশান্তি পাও এবং তিনি তোমাদের মধ্যে প্রীতির এবং করুণার সম্পর্ক সৃষ্টি করেছেন। এতে চিন্তাশীল জাতির জন্য অবশ্যই নিদর্শন রয়েছে।",
+            english: "And of His signs is that He created for you from yourselves mates that you may find tranquility in them; and He placed between you affection and mercy. Indeed, in that are signs for a people who give thought. (Surah Ar-Rum 30:21)"
+        },
+        {
+            arabic: "وَٱلْمُحْصَنَـٰتُ مِنَ ٱلنِّسَآءِ إِلَّا مَا مَلَكَتْ أَيْمَـٰنُكُمْ ۖ كِتَـٰبَ ٱللَّهِ عَلَيْكُمْ ۚ وَأُحِلَّ لَكُم مَّا وَرَآءَ ذَٰلِكُمْ أَنْ تَبْتَغُوا۟ بِأَمْوَٰلِكُم مُّحْصِنِينَ غَيْرَ مُسَـٰفِحِينَ ۚ فَمَا ٱسْتَمْتَعْتُم بِهِۦ مِنْهُنَّ فَـَٔاتُوهُنَّ أُجُورَهُنَّ فَرِيضَةًۭ ۚ وَلَا جُنَاحَ عَلَيْكُمْ فِيمَا تَرَٰضَيْتُم بِهِۦ مِنۢ بَعْدِ ٱلْفَرِيضَةِ ۚ إِنَّ ٱللَّهَ كَانَ عَلِيمًا حَكِيمًۭا",
+            bangla: "তোমাদের জন্য বিধান দেওয়া হয়েছে বিবাহিত নারীগণ (হারাম), তবে তারা নয়, যারা তোমাদের দাসত্বের অধীনে এসেছে। এটা আল্লাহর বিধান। এর বাইরে যা কিছু, তা তোমাদের জন্য হালাল করা হয়েছে, যাতে তোমরা তাদের সাথে বৈধ পন্থায় এবং পবিত্র জীবন যাপনের মাধ্যমে সম্পর্ক স্থাপন করো, অনৈতিক কর্মকাণ্ড নয়।",
+            english: "And [also prohibited to you are all] married women except those your right hands possess. [This is] the decree of Allah upon you. And lawful to you are [all others] beyond these, provided that you seek them [in marriage] with gifts from your property, desiring chastity, not unlawful sexual intercourse. (Surah An-Nisa 4:24)"
+        },
+        {
+            arabic: "هُنَّ لِبَاسٌۭ لَّكُمْ وَأَنتُمْ لِبَاسٌۭ لَّهُنَّ ۗ",
+            bangla: "তারা তোমাদের জন্য পোশাক এবং তোমরা তাদের জন্য পোশাক।",
+            english: "They are clothing for you and you are clothing for them. (Surah Al-Baqarah 2:187)"
+        },
+        {
+            arabic: "قُلْ لِّلْمُؤْمِنِينَ يَغُضُّوا۟ مِنْ أَبْصَـٰرِهِمْ وَيَحْفَظُوا۟ فُرُوجَهُمْ ۚ ذَٰلِكَ أَزْكَىٰ لَهُمْ ۗ إِنَّ ٱللَّهَ خَبِيرٌۢ بِمَا يَصْنَعُونَ",
+            bangla: "মুমিন পুরুষদের বলুন, তারা যেন তাদের দৃষ্টি নত রাখে এবং তাদের লজ্জাস্থান রক্ষা করে। এতে তাদের জন্য অধিক পবিত্রতা রয়েছে। নিশ্চয়ই আল্লাহ যা তারা করে তা ভালোভাবে জানেন।",
+            english: "Tell the believing men to reduce [some] of their vision and guard their private parts. That is purer for them. Indeed, Allah is Acquainted with what they do. (Surah An-Nur 24:30)"
+        },
+        {
+            arabic: "قُلْ لِّلْمُؤْمِنَـٰتِ يَغْضُضْنَ مِنْ أَبْصَـٰرِهِنَّ وَيَحْفَظْنَ فُرُوجَهُنَّ",
+            bangla: "মুমিন নারীদের বলুন, তারা যেন তাদের দৃষ্টি নত রাখে এবং তাদের লজ্জাস্থান রক্ষা করে।",
+            english: "And tell the believing women to reduce [some] of their vision and guard their private parts. (Surah An-Nur 24:31)"
+        }
+    ],
+    confused: [
+        {
+            arabic: "رَّبَّنَا لَا تُزِغْ قُلُوبَنَا بَعْدَ إِذْ هَدَيْتَنَا وَهَبْ لَنَا مِن لَّدُنْكَ رَحْمَةً ۖ إِنَّكَ أَنتَ الْوَهَّابُ",
+            bangla: "আমাদের প্রভু, আমাদের অন্তরগুলোকে পথভ্রষ্ট হইবে না, যখন তুমি আমাদেরকে পথ দেখিয়েছো, এবং আমাদের জন্য এক দয়া দান করো, নিশ্চয়ই তুমি দানশীল।",
+            english: "Our Lord, do not let our hearts deviate after You have guided us and grant us from Yourself mercy. Indeed, You are the Bestower. (Surah Al-Imran 3:8)"
+        },
+        {
+            arabic: "يُضِلُّ مَن يَشَاءُ وَيَهْدِي مَن يَشَاءُ",
+            bangla: "তিনি যাকে চান তাকে পথভ্রষ্ট করেন এবং যাকে চান তাকে পথ প্রদর্শন করেন।",
+            english: "He leads astray whom He wills and guides whom He wills. (Surah Al-Qamar 54:4)"
+        },
+        {
+            arabic: "وَقُل رَّبِّ زِدْنِي عِلْمًا",
+            bangla: "আর বল, ‘হে আমার প্রভু, আমার জ্ঞান বৃদ্ধি করো।’",
+            english: "And say, 'My Lord, increase me in knowledge.' (Surah Taha 20:114)"
+        },
+        {
+            arabic: "وَمَآ أَصَابَكُم مِّن مُّصِيبَةٍۢ فَبِمَا كَسَبَتْ أَيْدِيكُمْ وَيَعْفُوا۟ عَن كَثِيرٍۢ",
+            bangla: "আর তোমাদের মধ্যে যে কোন বিপদ আসবে তা তোমাদের নিজেদের কর্মের ফলস্বরূপ, আর তিনি অনেক কিছু ক্ষমা করেন।",
+            english: "And whatever strikes you of disaster is due to what your hands have earned; but He pardons much. (Surah Ash-Shura 42:30)"
+        },
+        {
+            arabic: "وَٱلَّذِينَ جَٰهَدُوا۟ فِينَا لَنَهْدِيَنَّهُمْ سُبُلَنَا ۖ وَإِنَّ ٱللَّهَ لَمَعَ ٱلْمُحْسِنِينَ",
+            bangla: "আর যারা আমাদের পথে সংগ্রাম করবে, আমরা তাদেরকে অবশ্যই আমাদের পথে পরিচালিত করব। আর আল্লাহ নিশ্চিতভাবে সদাচারীদের সাথেই আছেন।",
+            english: "And those who strive for Us - We will guide them to Our ways. And indeed, Allah is with the doers of good. (Surah Al-Ankabut 29:69)"
+        }
+    ],
+    content: [
+        {
+            arabic: "فَإِنَّ مَعَ ٱلْعُسْرِ يُسْرًا",
+            bangla: "নিশ্চয়ই কষ্টের সাথে রয়েছে স্বস্তি।",
+            english: "For indeed, with hardship [will be] ease. (Surah Ash-Sharh 94:6)"
+        },
+        {
+            arabic: "إِنَّ اللَّهَ لَا يُحِبُّ كُلَّ مُخْتَالٍ فَخُورٍ",
+            bangla: "নিশ্চয়ই আল্লাহ অহংকারী এবং গর্বিত ব্যক্তিকে ভালোবাসেন না।",
+            english: "Indeed, Allah does not like everyone self-deluded and boastful. (Surah Luqman 31:18)"
+        },
+        {
+            arabic: "وَجَعَلْنَا لَكُمْ مِنْهُ سُرُرًا وَجَعَلْنَا لَكُمْ فِيهِ جَنَّاتٍ",
+            bangla: "এবং আমরা তোমাদের জন্য এতে সুখী জীবন এবং উদ্যান রেখেছি।",
+            english: "And We have made for you from it [i.e., the earth] gardens of palm trees and vines. (Surah Al-Mulk 67:15)"
+        },
+        {
+            arabic: "وَلَا تَحْزَنْ إِنَّ اللَّـهَ مَعَنَا",
+            bangla: "দুঃখিত হয়ো না; নিশ্চয়ই আল্লাহ আমাদের সাথে আছেন।",
+            english: "Do not grieve; indeed, Allah is with us. (Surah At-Tawbah 9:40)"
+        },
+        {
+            arabic: "رَّضِيتُ بِاللَّـهِ رَبَّا وَبِالْإِسْلَامِ دِينًا وَبِمُحَمَّدٍ نَبِيًّا",
+            bangla: "আমি আল্লাহকে রব হিসেবে, ইসলামকে ধর্ম হিসেবে এবং মুহাম্মদ (সাঃ)-কে নবী হিসেবে সন্তুষ্ট।",
+            english: "I am pleased with Allah as my Lord, with Islam as my religion, and with Muhammad as my Prophet. (Hadith)"
+        }
+    ],
+    curious: [
+        {
+            arabic: "قُلْ سِيرُوا۟ فِى ٱلْأَرْضِ فَانظُرُوا۟ كَيْفَ بَدَأَ ٱلْخَلْقَ ثُمَّ ٱللَّهُ يُحْيِىٰ وَيُمِيتُ ۖ وَمَآ أَنتُمْ بِمُعْجِزِينَ",
+            bangla: "বলুন, ‘পৃথিবীতে ভ্রমণ কর, তারপর দেখ কীভাবে সৃষ্টি শুরু হয়েছে। তারপর আল্লাহ জীবন দান করেন এবং মৃত্যুর পর সৃষ্টি পুনঃপ্রাণিত করেন। এবং তোমরা কিছুতেই আল্লাহর মোকাবিলা করতে পারবে না।’",
+            english: "Say, 'Travel through the land and observe how He began creation; then Allah will bring about the final creation. Indeed, Allah is over all things competent.' (Surah Al-‘Ankabut 29:20)"
+        },
+        {
+            arabic: "وَقُلْ رَبِّ زِدْنِي عِلْمًا",
+            bangla: "আর বল, ‘হে আমার প্রভু, আমার জ্ঞান বৃদ্ধি করো।’",
+            english: "And say, 'My Lord, increase me in knowledge.' (Surah Taha 20:114)"
+        },
+        {
+            arabic: "وَمَآ أَصَابَكُم مِّن مُّصِيبَةٍۢ فَبِمَا كَسَبَتْ أَيْدِيكُمْ وَيَعْفُوا۟ عَن كَثِيرٍۢ",
+            bangla: "আর তোমাদের মধ্যে যে কোন বিপদ আসবে তা তোমাদের নিজেদের কর্মের ফলস্বরূপ, আর তিনি অনেক কিছু ক্ষমা করেন।",
+            english: "And whatever strikes you of disaster is due to what your hands have earned; but He pardons much. (Surah Ash-Shura 42:30)"
+        },
+        {
+            arabic: "إِنَّ فِى خَلْقِ السَّمَٰوَٰتِ وَالْأَرْضِ وَاخْتِلَٰفِ ٱلْلَّيْلِ وَالنَّهَارِ لَآيَٰتٍ لِّأُو۟لِى ٱلْأَلْبَابِ",
+            bangla: "নিশ্চয়ই আকাশ ও পৃথিবী সৃষ্টি এবং রাত ও দিনের পরিবর্তনে বোধশক্তিসম্পন্নদের জন্য নিদর্শন রয়েছে।",
+            english: "Indeed, in the creation of the heavens and the earth, and the alternation of the night and the day, are signs for those of understanding. (Surah Aal-e-Imran 3:190)"
+        },
+        {
+            arabic: "وَقُلْ رَبُّنَا لَا تُزِغْ قُلُوبَنَا بَعْدَ إِذْ هَدَيْتَنَا وَهَبْ لَنَا مِن لَّدُنْكَ رَحْمَةً ۖ إِنَّكَ أَنتَ الْوَهَّابُ",
+            bangla: "আমাদের প্রভু, আমাদের অন্তরগুলোকে পথভ্রষ্ট হইবে না, যখন তুমি আমাদেরকে পথ দেখিয়েছো, এবং আমাদের জন্য এক দয়া দান করো, নিশ্চয়ই তুমি দানশীল।",
+            english: "Our Lord, do not let our hearts deviate after You have guided us and grant us from Yourself mercy. Indeed, You are the Bestower. (Surah Al-Imran 3:8)"
+        }
+    ],
+    defeated: [
+    
+        {
+            arabic: "وَلَا تَقْنَطُوا۟ مِن رَّحْمَةِ ٱللَّهِ ۚ إِنَّ ٱللَّهَ يَغْفِرُ ٱلذُّنُوبَ جَمِيعًا ۚ إِنَّهُۥ هُوَ ٱلْغَفُورُ ٱلرَّحِيمُ",
+            bangla: "আর আল্লাহর রহমত থেকে নিরাশ হয়ো না। নিশ্চয়ই আল্লাহ সমস্ত পাপ মাফ করেন। নিশ্চয়ই তিনি পরম দয়ালু, পরম ক্ষমাশীল।",
+            english: "And do not despair of Allah's mercy. Indeed, Allah forgives all sins. Indeed, He is the Forgiving, the Merciful. (Surah Az-Zumar 39:53)"
+        },
+        {
+            arabic: "وَقَالَ رَبُّكُمْ ٱدْعُونِىٓ أَسْتَجِبْ لَكُمْ ۚ إِنَّ ٱلَّذِينَ يَسْتَكْبِرُونَ عَنْ عِبَادَتِى سَيَدْخُلُونَ جَهَنَّمَ دَاخِرِينَ",
+            bangla: "তোমাদের প্রভু বললেন, ‘আমাকে ডাকো, আমি তোমাদেরকে উত্তর দেব।’ নিশ্চয়ই যারা আমার ইবাদত করতে অহংকার করে, তারা অপমানিত অবস্থায় জাহান্নামে প্রবেশ করবে।",
+            english: "And your Lord says, 'Call upon Me; I will respond to you.' Indeed, those who disdain My worship will enter Hell in humiliation. (Surah Ghafir 40:60)"
+        },
+        {
+            arabic: "فَإِنَّ مَعَ ٱلْعُسْرِ يُسْرًا",
+            bangla: "নিশ্চয়ই কষ্টের সাথে রয়েছে স্বস্তি।",
+            english: "For indeed, with hardship [will be] ease. (Surah Ash-Sharh 94:6)"
+        },
+        {
+            arabic: "إِنَّ اللَّهَ مَعَنَا",
+            bangla: "নিশ্চয়ই আল্লাহ আমাদের সাথে আছেন।",
+            english: "Indeed, Allah is with us. (Surah At-Tawbah 9:40)"
+        }
+    ],
+    depressed: [
+        {
+            arabic: "إِنَّ مَعَ ٱلْعُسْرِ يُسْرًا",
+            bangla: "নিশ্চয়ই কষ্টের সাথে রয়েছে স্বস্তি।",
+            english: "For indeed, with hardship [will be] ease. (Surah Ash-Sharh 94:6)"
+        },
+        {
+            arabic: "وَلَا تَحْزَنُوا۟ إِنَّ اللَّهَ مَعَنَا",
+            bangla: "দুঃখিত হয়ো না; নিশ্চয়ই আল্লাহ আমাদের সাথে আছেন।",
+            english: "Do not grieve; indeed, Allah is with us. (Surah At-Tawbah 9:40)"
+        },
+        {
+            arabic: "فَإِنَّ رَبَّكَ وَقَّىٰكُمْ وَلَا تَقْنَطُوا۟ مِن رَّحْمَتِ اللَّهِ",
+            bangla: "তোমাদের প্রভু তোমাদেরকে সুরক্ষা দিয়েছেন এবং আল্লাহর রহমত থেকে নিরাশ হয়ো না।",
+            english: "Indeed, your Lord has protected you, and do not despair of Allah’s mercy. (Surah Ash-Sharh 94:6)"
+        },
+        {
+            arabic: "وَصَابِرُوا۟ وَصَابِرُوا۟ وَرَابِطُوا۟ وَاتَّقُوا۟ اللَّهَ لَعَلَّكُمْ تُفْلِحُونَ",
+            bangla: "ধৈর্য ধারণ কর, ধৈর্য ধারণ কর এবং আল্লাহকে ভয় কর, যাতে তোমরা সফল হতে পারো।",
+            english: "And be patient and endure, and fear Allah, that you may be successful. (Surah Aal-e-Imran 3:200)"
+        },
+        {
+            arabic: "قُلْ يَا عِبَادِىَ ٱلَّذِينَ آمَنُوا۟ إِنَّٓاۤمَلۡنَكُمۡ مُّغۡفِرَةًۭ وَرَحْمَةًۭ",
+            bangla: "বলুন, ‘হে আমার বান্দারা যারা ঈমান এনেছো! নিশ্চয়ই আমি তোমাদেরকে ক্ষমা এবং রহমত দান করেছি।’",
+            english: "Say, 'O My servants who have believed, indeed I have granted you forgiveness and mercy.' (Surah Az-Zumar 39:53)"
+        },
+        {
+            arabic: "وَلَا تَحْزَنُوا۟ عَلَىٰ مَا فَاتَكُمْ وَٱمْضُوا۟ فِى ٱلْأَرْضِ فِى رَحْمَتِهِۦۚ",
+            bangla: "তোমরা যে কিছু হারিয়েছো তাতে দুঃখিত হয়ো না, বরং পৃথিবীতে আমার রহমতে চলতে থাকো।",
+            english: "And do not grieve over what has passed and do not rejoice over what is before you. (Surah Al-A'raf 7:31)"
+        }
+    ],
+    desire: [
+        {
+            arabic: "قُلۡ إِنَّ رَحْمَتَ ٱللَّهِ قَرِيبٌۭ مِّنَ ٱلۡمُحْسِنِينَ",
+            bangla: "বলুন, আল্লাহর রহমত তো নিকটেই, সৎকর্মশীলদের জন্য।",
+            english: "Say, 'Indeed, the mercy of Allah is near to the doers of good.' (Surah Al-A'raf 7:56)"
+        },
+        {
+            arabic: "وَٱللَّهُ يَعۡلَمُ مَا فِىٓ أَنفُسِكُمْ فَٱجْتَنِبُوا۟هُ",
+            bangla: "আর আল্লাহ জানেন তোমাদের অন্তরে যা আছে, সুতরাং তা থেকে বিরত থাকো।",
+            english: "And Allah knows what is in your hearts, so avoid it. (Surah Al-Ahzab 33:3)"
+        },
+        {
+            arabic: "فَأَمَّا مَنۡ أَعۡطَىٰ وَٱتَّقَىٰ وَصَدَّقَ بِٱلۡحُسْنَىٰ فَسَنُسْهِّلُهُۥ لِلۡيُسْرَىٰ",
+            bangla: "অতএব, যে দান করেছে, যারা আল্লাহকে ভয় করে, এবং সত্যের প্রতি বিশ্বাস রাখে, আমরা তাকে সহজে সফলতা দেবো।",
+            english: "But as for he who gives and fears Allah, and believes in the best [reward], We will ease him toward ease. (Surah Al-Lail 92:5-7)"
+        },
+        {
+            arabic: "وَلَا تَحۡسَبَنَّ ٱلَّذِينَ كَفَرُوا۟ أَنَّمَا نُمْلِى لَهُمْ خَيْرٌۭ لّٱَنفُسِهِمْ إِنَّمَا نُمْلِى لَهُمْ لِيَزْدَادُوا۟ إِثْمًۭا",
+            bangla: "আর যারা কুফরী করেছে, তাদেরকে তোমরা যা কিছু দান করছো, তা তাদের জন্য ভালোর লক্ষণ ভাবো না, বরং এটা তাদেরকে আরও পাপী করে তোলে।",
+            english: "And do not think those who disbelieve are in a better position because of what We extend to them. We only extend to them so they may increase in sin. (Surah Aal-e-Imran 3:178)"
+        },
+        {
+            arabic: "وَقَالَ رَبُّكُمْ ٱدْعُونِىٓ أَسْتَجِبْ لَكُمْ ۚ إِنَّ ٱلَّذِينَ يَسْتَكْبِرُونَ عَنْ عِبَادَتِى سَيَدْخُلُونَ جَهَنَّمَ دَاخِرِينَ",
+            bangla: "তোমাদের প্রভু বললেন, ‘আমাকে ডাকো, আমি তোমাদেরকে উত্তর দেব।’ নিশ্চয়ই যারা আমার ইবাদত করতে অহংকার করে, তারা অপমানিত অবস্থায় জাহান্নামে প্রবেশ করবে।",
+            english: "And your Lord says, 'Call upon Me; I will respond to you.' Indeed, those who disdain My worship will enter Hell in humiliation. (Surah Ghafir 40:60)"
+        }
+    ],
+    desperate: [
+        {
+            arabic: "فَإِنَّ مَعَ ٱلْعُسْرِ يُسْرًا",
+            bangla: "নিশ্চয়ই কষ্টের সাথে রয়েছে স্বস্তি।",
+            english: "For indeed, with hardship [will be] ease. (Surah Ash-Sharh 94:6)"
+        },
+        {
+            arabic: "وَلَا تَقْنَطُوا۟ مِن رَّحْمَةِ ٱللَّهِ ۚ إِنَّ ٱللَّهَ يَغْفِرُ ٱلذُّنُوبَ جَمِيعًۭا إِنَّهُۥ هُوَ ٱلْغَفُورُ ٱلرَّحِيمُ",
+            bangla: "এবং আল্লাহর রহমত থেকে নিরাশ হয়ো না; নিশ্চয়ই আল্লাহ সমস্ত পাপ মাফ করেন, তিনি পরম ক্ষমাশীল, পরম দয়ালু।",
+            english: "And do not despair of Allah's mercy. Indeed, Allah forgives all sins; indeed, He is the Forgiving, the Merciful. (Surah Az-Zumar 39:53)"
+        },
+        {
+            arabic: "وَإِذَا سَأَلَكَ عِبَادِى عَنِّى فَإِنِّى قَرِيبٌۭ أُجِيبُ دَعْوَةَ ٱلدَّاعِ إِذَا دَعَانِ",
+            bangla: "আর যখন আমার বান্দারা তোমার কাছে আমার সম্পর্কে জানতে চায়, তখন আমি নিকটেই আছি, আমি দানকারীকে তার প্রার্থনা অনুযায়ী উত্তর দেব।",
+            english: "And when My servants ask you concerning Me, indeed I am near. I respond to the invocation of the supplicant when he calls upon Me. (Surah Al-Baqarah 2:186)"
+        },
+        {
+            arabic: "وَقَالَ رَبُّكُمْ ٱدْعُونِىٓ أَسْتَجِبْ لَكُمْ",
+            bangla: "তোমাদের প্রভু বললেন, ‘আমাকে ডাকো, আমি তোমাদেরকে উত্তর দেব।’",
+            english: "And your Lord says, 'Call upon Me; I will respond to you.' (Surah Ghafir 40:60)"
+        }
+    ],
+    determined: [
+        {
+            arabic: "إِنَّ اللَّذِينَ قَالُوا۟ رَبُّنَا ٱللَّهُ ثُمَّ ٱسْتَقَامُوا۟ فَلَا خَوْفٌۭ عَلَيْهِمْ وَلَا هُمْ يَحْزَنُونَ",
+            bangla: "নিশ্চয়ই, যারা বলেছে ‘আমাদের পালনকর্তা আল্লাহ’, তারপর দৃঢ়ভাবে অবিচলিত থেকেছে, তাদের জন্য কোন ভয় নেই, এবং তারা দুঃখিত হবে না।",
+            english: "Indeed, those who have said, 'Our Lord is Allah' and then remained steadfast - there will be no fear concerning them, nor will they grieve. (Surah Al-Ahqaf 46:13)"
+        },
+        {
+            arabic: "وَقُل رَّبُّ زِدْنِى عِلْمًۭا",
+            bangla: "আর বল, ‘প্রভু, আমাকে আরো জ্ঞান দাও।’",
+            english: "And say, 'My Lord, increase me in knowledge.' (Surah Taha 20:114)"
+        },
+        {
+            arabic: "فَإِنَّ مَعَ ٱلْعُسْرِ يُسْرًا",
+            bangla: "নিশ্চয়ই, কষ্টের সাথে রয়েছে স্বস্তি।",
+            english: "For indeed, with hardship [will be] ease. (Surah Ash-Sharh 94:6)"
+        },
+        {
+            arabic: "يُحِبُّونَ أَنْ يَجْتَنِبُوا۟ أَوْ مَا يُؤْذِيهِمْ",
+            bangla: "তারা প্রিয় করে, এমন কাজ করা যেটি তাদেরকে কষ্ট দেয় না।",
+            english: "They love to avoid what harms them. (Surah At-Tawbah 9:118)"
+        },
+        {
+            arabic: "إِنَّ اللَّهَ يُحِبُّ ٱلَّذِينَ يُقَاتِلُونَ فِى سَبِيلِهِۦ صَفًّۭا كَأَنَّهُمْ بُنْيَانٌۭ مَّرْصُوصٌۭ",
+            bangla: "নিশ্চয়ই আল্লাহ তাদেরকে ভালোবাসেন যারা তাঁর পথে যুদ্ধ করে, সোজা সারিতে দাঁড়িয়ে যেন দৃঢ়কিত প্রাচীর।",
+            english: "Indeed, Allah loves those who fight in His cause in a row as though they are a solid structure. (Surah As-Saff 61:4)"
+        }
+    ],
+    disbelief: [
+        {
+            arabic: "وَقَالُوا۟ أَئِذَا ضَلَلْنَا فِى ٱلْأَرْضِ أَءِنَّا لَفِى خَلْقٍۢ جَدِيدٍۢ ۚ بَلۡ هُم بِرَٰبِّهِمْ كَٰفِرُونَ",
+            bangla: "আর তারা বলল, ‘আমরা যদি পৃথিবীতে হারিয়ে যাই, তবে কি আমরা একটি নতুন সৃষ্টি হবো?’ বরং তারা তাদের রবের প্রতি অবিশ্বাসী।",
+            english: "And they said, 'When we are lost within the earth, will we indeed be recreated in a new creation?' But they are, in the matter of meeting their Lord, disbelievers. (Surah As-Sajdah 32:10)"
+        },
+        {
+            arabic: "وَمَآ ءَامَنَتْ سَٰبِقَتٌۭ فِى قَرْيَتِهِمْ فَإِنَّهُمْ لَفِى شَكٍۢ مُّرِيبٍۢ",
+            bangla: "তাদের শহরে কেউ বিশ্বাস করেনি, নিশ্চয় তারা সন্দেহে ভুগছে।",
+            english: "And no one believed in their cities except a few, and indeed they were in a state of doubt and confusion. (Surah Al-Mulk 67:5)"
+        },
+        {
+            arabic: "فَمَا لَهُمْ لَا يُؤْمِنُونَ ۩",
+            bangla: "তাদের কি হয়েছে যে তারা ঈমান আনে না?",
+            english: "So what is [the matter] with them that they do not believe? (Surah Al-Mursalat 77:48)"
+        },
+        {
+            arabic: "وَقَالَ الَّذِينَ كَفَرُوا۟ لَوۡ مَآ أُنزِلَ عَلَيْهِ ٱلۡقُرۡآنُ جُمْلَةًۭ وَٰحِدَةًۭ ۗ كَذَٰلِكَ لِنُثَبِّتَ بِهِۦ فُؤَادَكَ ۖ وَرَتَّلْنَاهُ تَرْتِيلًۭا",
+            bangla: "আর যারা কাফের তারা বলল, ‘কেন কোরআন একসাথে তার উপর প্রেরিত হলো না?’ এভাবে যাতে তোমার হৃদয় শক্ত হয়, আর আমরা এটি ধীরে ধীরে পাঠ করেছি।",
+            english: "And those who disbelieve say, 'Why was the Qur'an not revealed to him all at once?' Thus it is, that We may strengthen your heart thereby, and We have spaced it distinctly. (Surah Al-Furqan 25:32)"
+        },
+        {
+            arabic: "وَقَالُوا۟ لَوۡ مَآ ءَٰتَىٰنَا بِـٰٓيَةٍۢ مِّن رَّبِّنَا ۚ قُلْ إِنَّ ٱللَّهَ قَادِرٌۭ عَلَىٰٓ أَن يُنَزِّلَ بۡيَـٰتٍۢ وَلَٰكِنَّ أَكْثَرَهُمْ لَا يَعْلَمُونَ",
+            bangla: "আর তারা বলল, ‘আমাদের কাছে আমাদের রবের পক্ষ থেকে কোন নিদর্শন কেন আসছে না?’ বল, ‘নিশ্চয়ই আল্লাহ ক্ষমতাশালী, কিন্তু তাদের অধিকাংশই জানে না।’",
+            english: "And they said, 'Why has no sign been sent down to him from his Lord?' Say, 'Indeed, Allah is capable of sending down a sign, but most of them do not know.' (Surah Al-An'am 6:37)"
+        }
+    ],
+    doubtful: [
+        {
+            arabic: "وَٱتَّبِعُوا۟ مَآ أُنزِلَ إِلَيْكُم مِّن رَّبِّكُمْ وَلَا تَتَّبِعُوا۟ مِن دُونِهِۦٓ أَوۡلِيَآءَ ۚ قَلِيلًۭا مَّا تَذَكَّرُونَ",
+            bangla: "তোমাদের কাছে তোমাদের রবের পক্ষ থেকে যা নাযিল করা হয়েছে, তা অনুসরণ করো, আর তাঁর বাহিরে অন্য কোনো অভিভাবককে অনুসরণ করো না। তোমরা খুব কমই উপদেশ গ্রহণ করো।",
+            english: "And follow what has been revealed to you from your Lord, and do not follow other than Him as allies. Little do you remember. (Surah Al-A'raf 7:3)"
+        },
+        {
+            arabic: "إِنَّمَآ أَمْرُهُۥٓ إِذَآ أَرَادَ شَيْـًۭٔا أَن يَقُولَ لَهُۥ كُنۖ فَيَكُونُ",
+            bangla: "নিশ্চয়ই, তাঁর কাজ এমন, যে তিনি যখন কিছু ইচ্ছা করেন, তিনি শুধু বলেন, ‘হও!’ আর তা হয়ে যায়।",
+            english: "Indeed, His command when He intends a thing is only that He says to it, 'Be,' and it is. (Surah Ya-Sin 36:82)"
+        },
+        {
+            arabic: "فَإِنَّ مَعَ ٱلۡعُسْرِ يُسْرًۭا",
+            bangla: "অতএব, কষ্টের সাথে স্বস্তি রয়েছে।",
+            english: "For indeed, with hardship [will be] ease. (Surah Ash-Sharh 94:6)"
+        },
+        {
+            arabic: "وَصَابِرُوا۟ وَصَابِرُوا۟ وَرَٰبِطُوا۟ وَٱتَّقُوا۟ ٱللَّهَ لَعَلَّكُمۡ تُفْلِحُونَ",
+            bangla: "তুমি ধৈর্য ধারণ কর, তুমি ধৈর্য ধারণ কর, এবং আল্লাহকে ভয় কর, যাতে তোমরা সফল হতে পারো।",
+            english: "And be patient and endure, and fear Allah that you may be successful. (Surah Al-Imran 3:200)"
+        },
+        {
+            arabic: "وَمَن يَتَّقِ ٱللَّهَ يَجْعَل لَّهُۥ مَخْرَجًۭا",
+            bangla: "এবং যারা আল্লাহকে ভয় করে, তিনি তাদের জন্য পথ বের করেন।",
+            english: "And whoever fears Allah - He will make a way for him to get out. (Surah At-Talaq 65:2)"
+        }
+    ],
+    envious: [
+        {
+            arabic: "وَلَا تَتَمَنَّوۡا۟ مَا فَضَّلَ ٱللَّهُ بِهِۦۤ بَعۡضَكُمۡ عَلَىٰ بَعۡضٍۢۚ لِّلرِّجَٰلِ نَصِيبٌۭ مِّمَّا اكۡتَسَبُوا۟ وَلِلنِّسَآءِ نَصِيبٌۭ مِّمَّا اكۡتَسَبْنَۗ وَٱسْـَٔلُوا۟ ٱللَّهَ مِنۢ فَضۡلِهِۦٓ ۚ إِنَّ ٱللَّهَ كَانَ بِكُلِّ شَىۡءٍ عَلِيمًۭا",
+            bangla: "আর তোমরা যা কিছু পেয়েছ, তার জন্য একে অপরের প্রতি ঈর্ষা করো না। পুরুষদের জন্য তাদের উপার্জনের একটি অংশ আছে, এবং নারীদের জন্য তাদের উপার্জনের একটি অংশ আছে। এবং আল্লাহর কাছ থেকে তাঁর অনুগ্রহ চাও। নিশ্চয়ই, আল্লাহ সব কিছু জানেন।",
+            english: "And do not wish for that by which Allah has made some of you exceed others. For men is a share of what they have earned, and for women is a share of what they have earned. And ask Allah of His grace. Indeed, Allah is ever, of all things, Knowing. (Surah An-Nisa 4:32)"
+        },
+        {
+            arabic: "أَمْ يَحْسُدُونَ النَّاسَ عَلَىٰ مَآ ءَاتَٰهُمُ ٱللَّهُ مِن فَضْلِهِۦ ۚ فَقَدْ ءَاتَيْنَآ ءَالَ إِبْرَٰهِيمَ ٱلۡكِتَٰبَ وَٱلْحِكْمَةَ وَٰتَيْنَٰهُم مُّلْكًۭا عَظِيمًۭا",
+            bangla: "তারা কি মানুষদের ঈর্ষা করছে সে কারণে যা আল্লাহ তাদেরকে অনুগ্রহে দিয়েছেন? নিশ্চয়ই, আমরা ইবরাহিমের বংশধরদেরকে কিতাব ও হিকমত দিয়েছি, এবং তাদেরকে মহৎ রাজত্ব দিয়েছি।",
+            english: "Or are they envious of the people for what Allah has given them of His bounty? But We had already given the family of Ibrahim the Scripture and wisdom and conferred upon them a great kingdom. (Surah An-Nisa 4:54)"
+        },
+        {
+            arabic: "لَا تَحۡسَبُوا۟ الَّذِينَ يَفْرَحُونَ بِمَا فَعَلُوا۟ وَيُحِبُّونَ أَن يُحْمَدُوا۟ بِمَا لَمْ يَفْعَلُوا۟ فَلَا تَحۡسَبُوا۟هُم بِمَفَازَةٍۢ مِّنَ ٱلۡعَذَابِ ۖ وَ لَهُمْ عَذَابٌۭ أَلِيمٌۭ",
+            bangla: "তোমরা যাদের মনে আত্মপ্রশংসা ও অহংকার আছে, যারা অন্যদের প্রশংসা আশা করে, তাদেরকে তুমি সফল মনে করো না। তাদের জন্য রয়েছে কঠিন শাস্তি।",
+            english: "Do not think those who rejoice for what they have done and love to be praised for what they did not do, think they are in the clear. For they are in great punishment. (Surah Aal-E-Imran 3:188)"
+        },
+        {
+            arabic: "وَقَالَتْ لِهۦٰ قَرِيبَتُهُۥ يَا لَيۡتَنِى مِثۡلَ مَآ أُوتِيتُۥۤ لَوْ كُنۡتُۥ لَكَمۡ كَذَٰلِكَ",
+            bangla: "তার বোন বললো, ‘কিন্তু আমি সেই অনুগ্রহের অধিকারী হইনি, যেটি তুমিই পেয়েছ।’",
+            english: "And his relative said, 'Oh, I wish I had what you were given! (Surah Al-Kahf 18:39)"
+        },
+        {
+            arabic: "وَٱلَّذِينَ يَقُولُونَ رَبَّنَا لَا تُؤۡمِتْنَا قَبْلَ رُؤۡيَتِكُمُ",
+            bangla: "আর যারা বলে, ‘হে আমাদের প্রভু, আমাদের ঈর্ষা থেকে আমাদের রক্ষা করো, আমাদের প্রতিযোগীতা থেকে বাঁচাও।",
+            english: "And those who say, 'Our Lord, do not allow us to fall into envy. (Surah Al-Furqan 25:63)"
+        }
+    ],
+    grateful: [
+        {
+            arabic: "وَإِذۡ تَأَذَّنَ رَبُّكُمْ لَئِن شَكَرَتُّمْ لَأَزِيدَنَّكُمْ وَلَئِن كَفَرْتُمْ إِنَّ عَذَابِ لَشَدِيدٌۢ",
+            bangla: "আর তোমাদের প্রভু ঘোষণা করেছেন, ‘যদি তোমরা কৃতজ্ঞ হও তবে আমি তোমাদের আরো দেব। আর যদি তোমরা অবাধ্য হও তবে আমার শাস্তি খুবই কঠিন।’",
+            english: "And [remember] when your Lord proclaimed: 'If you are grateful, I will surely increase your favor upon you; but if you deny, indeed, My punishment is severe.' (Surah Ibrahim 14:7)"
+        },
+        {
+            arabic: "فَذُوقُوا۟ بِمَا نَسِيتُمْ لِقَآءَ يَوْمِكُمْ ۚ إِنَّا نَسِينَٰكُمْ ۖ إِنَّا كَانَ لَا يُؤْمِنُونَ بِهِۦٓ",
+            bangla: "তোমরা যে দিনে সাক্ষাৎ আশা করেছিলে, আজ তার শাস্তি আসবে। তুমি ঐ শাস্তি ভোগ করবে।",
+            english: "So taste [the punishment] for what you forgot the meeting of this Day. Indeed, We have forgotten you. Indeed, Allah is not unjust to the servants. (Surah As-Sajda 32:14)"
+        },
+        {
+            arabic: "إِنَّ اللَّهَ لَا يُضِيعُ أَجْرَ ٱلْمُحْسِنِينَ",
+            bangla: "নিশ্চয়ই, আল্লাহ সৎকর্মশীলদের পুরস্কার নষ্ট করেন না।",
+            english: "Indeed, Allah does not allow the reward of the righteous to be lost. (Surah At-Tawba 9:120)"
+        },
+        {
+            arabic: "وَٱمۡتَـٰٓلُوا۟ بِمَآ أُوتِيتُمۡ وَٱمۡتَـٰٓلُوا۟ بِٱللَّهِ فَجَزَاؤُهُۥٓ لَكُمۡ سَيُدْهُرُهُۥٓ",
+            bangla: "তোমরা দান করো এবং আল্লাহর কাছে তোমরা যা চাও তা ফিরে পাবো।",
+            english: "And extend your hands to Allah in gratitude for what He has granted you. (Surah An-Nahl 16:97)"
+        },
+        {
+            arabic: "وَأَمَّا بِنِعْمَتِ رَبِّكَ فَحَدِّثْ",
+            bangla: "আর তোমার প্রভুর অনুগ্রহের কথা ঘোষণা করো।",
+            english: "And as for the favor of your Lord, report it. (Surah Ad-Duhaa 93:11)"
+        },
+        {
+            arabic: "وَفَجَّرْنَا ٱلۡأَرْضَ عُيُونًۭا فَٱلۡتَقَى ٱلْمَآءُ عَلَىٰٓ أَمْرٍۢ قَدَرٍۢ",
+            bangla: "এবং আমরা পৃথিবী থেকে পানি প্রবাহিত করলাম যাতে তা একসাথে মিলিত হয়।",
+            english: "And We caused the earth to gush forth with springs, and the waters met for a matter already predestined. (Surah Al-Qamar 54:12)"
+        }
+    ],
+    guilty: [
+        {
+            arabic: "وَٱلَّذِينَ إِذَا فَعَلُوا۟ فَٰحِشَةًۭ أَوْ ظَلَمُوا۟ أَنفُسَهُمْ ذَكَرُوا۟ ٱللَّهَ فَٱسْتَغْفَرُوا۟ لِذُنُوبِهِمْ وَمَن يَغْفِرُ ٱلذُّنُوبَ إِلَّا ٱللَّهُ ۚ وَلَمْ يُصِرُّوا۟ عَلَىٰ مَا فَعَلُوا۟ وَهُمْ يَعْلَمُونَ",
+            bangla: "এবং যারা যখন অশ্লীল কাজ করে বা নিজেদের উপর অবিচার করে, তারা আল্লাহকে স্মরণ করে এবং নিজেদের পাপের জন্য ক্ষমা চায়। আর আল্লাহ ছাড়া কে পাপ মাফ করতে পারে? এবং তারা যে পাপ করেছে তা পুনরায় করবে না, জানার পরও।",
+            english: "And those who, when they commit an immorality or wrong themselves [by sin], remember Allah and seek forgiveness for their sins - and who can forgive sins except Allah? - and [who] do not persist in what they have done while they know. (Surah Aal-E-Imran 3:135)"
+        },
+        {
+            arabic: "قُلْ يَا عِبَادِىَ ٱلَّذِينَ أَسْرَفُوا۟ عَلَىٰٓ أَنفُسِهِمْ لَا تَقْنَطُوا۟ مِن رَّحْمَةِ ٱللَّهِ ۚ إِنَّ ٱللَّهَ يَغْفِرُ ٱلذُّنُوبَ جَمِيعًۭا ۖ إِنَّهُۥ هُوَ ٱلۡغَفُورُ ٱلرَّحِيمُ",
+            bangla: "বলো, ‘হে আমার বান্দারা, তোমরা যারা নিজেদের উপরে সীমালঙ্ঘন করেছ, আল্লাহর রহমত থেকে নিরাশ হয়ো না। নিশ্চয়ই, আল্লাহ সমস্ত পাপ মাফ করেন। তিনি তো সর্বাধিক ক্ষমাশীল, পরম দয়ালু।’",
+            english: "Say, 'O My servants who have harmed yourselves by your own hands, do not despair of Allah's mercy. Indeed, Allah forgives all sins. Indeed, He is the Most Forgiving, the Most Merciful.' (Surah Az-Zumar 39:53)"
+        },
+        {
+            arabic: "وَمَن يَعْمَلْ سُوءًۭا أَوْ يَظْلِمْ نَفْسَهُۥ ثُمَّ يَسْتَغْفِرِ ٱللَّهَ يَجِدِ ٱللَّهَ غَفُورًۭا رَّحِيمًۭا",
+            bangla: "যে কেউ খারাপ কাজ করে বা নিজেকে অন্যায়ভাবে ক্ষতিগ্রস্ত করে, তারপর আল্লাহর কাছে ক্ষমা প্রার্থনা করে, সে আল্লাহকে ক্ষমাশীল এবং দয়ালু পাবে।",
+            english: "And whoever does an evil or wrongs himself but then seeks forgiveness of Allah will find Allah Forgiving and Merciful. (Surah An-Nisa 4:110)"
+        },
+        {
+            arabic: "إِنَّ ٱللَّهَ غَفُورٌۭ رَّحِيمٌۭ",
+            bangla: "নিশ্চয়ই আল্লাহ পরম ক্ষমাশীল, পরম দয়ালু।",
+            english: "Indeed, Allah is Forgiving and Merciful. (Surah Al-Mumtahanah 60:7)"
+        },
+        {
+            arabic: "فَٱصْبِرْ صَبْرًۭا جَمِيلًۭا إِنَّمَا يُؤْمِنُونَ بِأَنَّهُمْ فِي رَحْمَةِ ٱللَّهِ",
+            bangla: "অতএব, তোমরা সুন্দরভাবে ধৈর্য ধারণ করো। নিশ্চয়ই আল্লাহর রহমত তাদের জন্যই যারা পাপ থেকে ফিরে আসে।",
+            english: "So be patient with gracious patience. Indeed, they who repent and believe, and do righteous work - they will be guided by Allah's mercy. (Surah At-Tawba 9:115)"
+        },
+        {
+            arabic: "وَمَن تَابَ وَعَمِلَ صَـٰلِحًۭا فَإِنَّهُۥ يَتُوبُ إِلَىٰ ٱللَّهِ مَتَابًۭا",
+            bangla: "যে কেউ তাওবা করে এবং সৎকর্ম করে, সে আল্লাহর কাছে পবিত্র তাওবা গ্রহণ করবে।",
+            english: "And whoever repents and does righteous work has certainly turned to Allah with [accepted] repentance. (Surah Furqan 25:71)"
+        }
+    ],
+    hatred: [
+        {
+            arabic: "وَإِذَا حَٰدُوا۟ فَٱصْبِرْ إِنَّكَ فِىٰۤ عَلَىٰٓ عَيْنِىٰ",
+            bangla: "আর যখন তারা শত্রুতা করবে, তখন ধৈর্য ধরো। নিশ্চয়ই তুমি আমার দৃষ্টির মধ্যে থাকবে।",
+            english: "And when they incline toward peace, then incline toward it and trust in Allah. Indeed, He is the Hearing, the Knowing. (Surah Al-Anfal 8:61)"
+        },
+        {
+            arabic: "وَلَا تَسْتَوِىٰ ٱلْحَسَنَةُ وَلَا ٱلسَّيِّئَةُ ۚ ٱدْفَعْ بِٱلَّتِىۤ هِىَ أَحْسَنُ فَإِذَا ٱلَّذِىۤ بَيْنَكَ وَبَيْنَهُۥ عَدَاوَةٌۭ كَأَنَّهُۥ وَلِىٌّۭ حَمِيمٌۭ",
+            bangla: "এবং ভাল এবং মন্দ কখনো সমান হতে পারে না। তুমি মন্দের প্রতি এমনভাবে প্রতিকার করো যা সুন্দর, তাতে তোমার শত্রু এমন বন্ধু হয়ে যাবে যেন সে তোমার খুব প্রিয় বন্ধু।",
+            english: "And not equal are the good deed and the bad. Repel [evil] by that which is better, and thereupon the one who between you and him is enmity will become as though he was a devoted friend. (Surah Fussilat 41:34)"
+        },
+        {
+            arabic: "وَقُولُوا۟ لِلنَّاسِ حُسْنًۭا وَإِنَّنَا لَٰٓتُودُّونَ إِلَّا إِلَّآنَا",
+            bangla: "তুমি মানুষদের প্রতি ভাল কথা বলো। নিশ্চয়ই আমরা শুধু আল্লাহর প্রতি ভালবাসা পোষণ করি।",
+            english: "And speak to people good [words]. (Surah Al-Baqarah 2:83)"
+        },
+        {
+            arabic: "وَٱلْكَاظِمِينَ ٱلْغَيْظَ وَٱلْعَافِينَ عَنِ ٱلنَّاسِ ۚ وَٱللَّهُ يُحِبُّ ٱلْمُحْسِنِينَ",
+            bangla: "এবং যারা রাগ চাপিয়ে রাখে এবং মানুষের বিরুদ্ধে ক্ষমা করে দেয়। আর আল্লাহ সৎকর্মশীলদের ভালোবাসেন।",
+            english: "And those who suppress [their] anger and who pardon people - and Allah loves the doers of good. (Surah Al-Imran 3:134)"
+        },
+        {
+            arabic: "وَقُلْ رَبُّنَا لَا تُؤَاخِذْنَا إِن نَّسِينَا أَوْ أَخْطَأْنَا ۚ رَبُّنَا وَلَا تَحْمِلْ عَلَيْنَا إِصْرًۭا كَمَا حَمَلْتَهُۥ عَلَى ٱلَّذِينَ مِن قَبْلِنَا ۚ رَبُّنَا وَلَا تُحَمِّلْنَا مَا لَا طَاقَةَ لَنَا بِهِۦ ۚ وَاعْفُ عَنَّا وَٱغْفِرْ لَنَا وَٱرْحَمْنَا ۚ أَنتَ مَوْلَٰنَا فَٱمْشُرْ لَنَا عَلَى ٱلْقَوْمِ ٱلْكَٰفِرِينَ",
+            bangla: "বলুন, ‘হে আমাদের রব, যদি আমরা ভুলে যাই বা ভুল করে ফেলি, তাহলে আমাদের পাপ থেকে তোমার ক্ষমা চাই। আমাদের ওপর অতিরিক্ত বোঝা আরোপ করো না, যেমন পূর্ববর্তী জাতির ওপর আরোপ করেছিলে। আমাদের ওপর এমন দায়িত্ব আরোপ করো না, যা আমাদের সামর্থ্যের বাইরে। আমাদের ক্ষমা করো, আমাদের মাফ করো এবং আমাদের প্রতি দয়া দেখাও। তুমি আমাদের অভিভাবক, অতএব আমাদেরকে কাফেরদের ওপর বিজয় দান করো।’",
+            english: "Say, 'Our Lord, do not impose blame upon us if we forget or make a mistake. Our Lord, and lay not upon us a burden like that which You laid upon those before us. Our Lord, and do not burden us with that which we have no ability to bear. And pardon us; and forgive us; and have mercy upon us.' (Surah Al-Baqarah 2:286)"
+        },
+        {
+            arabic: "وَٱلْحَسَنَةُ فِي قَوْلٍۢ يَعْتَزُّ بِهِۦۙ وَإِنَّ ٱللَّهَ يَعْلَمُ وَيَغْفِرُ لِمَن يَشَا۟",
+            bangla: "এবং ভাল কথা এবং ভালো আচরণ আপনাকে শক্তিশালী করে, আর আল্লাহ জানেন এবং যাকে ইচ্ছা মাফ করেন।",
+            english: "And goodness in speech will make a person proud and strong, and Allah knows and forgives whom He wills. (Surah At-Tawbah 9:104)"
+        }
+    ],
+    humiliated: [
+        {
+            arabic: "إِنَّ اللَّهَ لَا يُضِيعُ أَجْرَ الْمُحْسِنِينَ",
+            bangla: "নিশ্চয়ই আল্লাহ ভালো কাজকারীদের পুরস্কৃত করেন না।",
+            english: "Indeed, Allah does not allow the reward of the doers of good to be lost. (Surah At-Tawbah 9:120)"
+        },
+        {
+            arabic: "فَإِنَّ مَعَ ٱلْعُسْرِ يُسْرًۭا",
+            bangla: "অতএব, কঠিন সময়ের সঙ্গে সহজতা থাকবে।",
+            english: "For indeed, with hardship [will be] ease. (Surah Ash-Sharh 94:6)"
+        },
+        {
+            arabic: "وَمَا تَفْعَلُوا۟ مِنْ خَيْرٍۢ فَإِنَّ اللَّهَ بِهِۦ عَلِيمٌۭ",
+            bangla: "তোমরা যা কিছু ভাল কাজ করো, আল্লাহ তা জানেন।",
+            english: "And whatever good you do, indeed Allah is Knowing of it. (Surah Al-Baqarah 2:197)"
+        },
+        {
+            arabic: "وَعَسَىٰٓ أَنْ تَكْرَهُوا۟ شَيْءًۭا وَهُوَ خَيْرٌۭ لَكُمْ",
+            bangla: "হয়তো তোমরা কিছু অপছন্দ করবে, অথচ তা তোমাদের জন্য ভালো হতে পারে।",
+            english: "And perhaps you dislike something while it is good for you. (Surah Al-Baqarah 2:216)"
+        },
+        {
+            arabic: "لَا تَحْزَنْ إِنَّ اللَّهَ مَعَنَا",
+            bangla: "দুঃখিত হয়ো না, নিশ্চয়ই আল্লাহ আমাদের সঙ্গে আছেন।",
+            english: "Do not grieve; indeed, Allah is with us. (Surah At-Tawbah 9:40)"
+        },
+        {
+            arabic: "إِنَّ اللَّهَ مَعَ الصَّابِرِينَ",
+            bangla: "নিশ্চয়ই আল্লাহ ধৈর্যশীলদের সঙ্গে আছেন।",
+            english: "Indeed, Allah is with those who are patient. (Surah Al-Baqarah 2:153)"
+        },
+        {
+            arabic: "وَمَن يَتَّقِ اللَّهَ يَجْعَلْ لَهُۥ مَخْرَجًۭا",
+            bangla: "যে আল্লাহকে ভয় করবে, আল্লাহ তাকে মুক্তির পথ দেবেন।",
+            english: "And whoever fears Allah – He will make a way for him to get out [from every difficulty]. (Surah At-Talaq 65:2)"
+        },
+        {
+            arabic: "وَقُل لِّعِبَادِىۤ يَقُولُوا۟ الَّتِى هِىَ أَحْسَنُ ۖ إِنَّ الشَّيْطَٰنَ يَنزَعُ بَيْنَهُمْ",
+            bangla: "এবং আমার বান্দাদের বল, তারা এমন কথা বলুক যা উত্তম। কারণ, শয়তান তাদের মধ্যে বিভেদ সৃষ্টি করে।",
+            english: "And tell My servants to say that which is best. Indeed, Satan invokes discord among them. (Surah Al-Isra 17:53)"
+        }
+    ],
+    hurt: [
+        {
+            arabic: "إِنَّ مَعَ ٱلْعُسْرِ يُسْرًۭا",
+            bangla: "অতএব, কঠিন সময়ের সঙ্গে সহজতা থাকবে।",
+            english: "For indeed, with hardship [will be] ease. (Surah Ash-Sharh 94:6)"
+        },
+        {
+            arabic: "فَإِنَّ اللَّهَ مَعَ الصَّابِرِينَ",
+            bangla: "নিশ্চয়ই আল্লাহ ধৈর্যশীলদের সঙ্গে আছেন।",
+            english: "Indeed, Allah is with those who are patient. (Surah Al-Baqarah 2:153)"
+        },
+        {
+            arabic: "وَقُلْ رَبُّ أَعُوذُ بِكَ مِنْ هَمَزَٰتِ الشَّيَاطِينِ",
+            bangla: "বল, ‘হে আমার পালনকর্তা, আমি শয়তানদের প্ররোচনা থেকে আপনার কাছে আশ্রয় চাই।’",
+            english: "And say, 'My Lord, I seek refuge in You from the whisperings of the devils.' (Surah Al-Mu’minun 23:97)"
+        },
+        {
+            arabic: "وَلَا تَقْنَطُوا۟ مِن رَّحْمَةِ ٱللَّهِ",
+            bangla: "আল্লাহর রহমত থেকে হতাশ হয়ো না।",
+            english: "And do not despair of the mercy of Allah. (Surah Az-Zumar 39:53)"
+        },
+        {
+            arabic: "فَصَبْرٌۭ جَمِيلٌۭ",
+            bangla: "অতএব, সুন্দর ধৈর্য ধারণ করো।",
+            english: "So be patient with a beautiful patience. (Surah Al-Ma'arij 70:5)"
+        },
+        {
+            arabic: "وَإِنَّ مَعَ ٱلْفَجْرِ سَاعَةًۭ لَّا تَفَجُّرُ فِيهَا",
+            bangla: "এবং পৃথিবীতে একটি সময় আসবে যখন সবাই সুখী হবে।",
+            english: "And with every dawn, there is a moment that will bring relief. (Surah Ad-Duha 93:3)"
+        },
+        {
+            arabic: "إِنَّآ أَعْطَيْنَٰكَ الْكَوْثَرَ",
+            bangla: "নিশ্চয়ই, আমি তোমাকে কওসার দান করেছি।",
+            english: "Indeed, We have granted you, [O Muhammad], al-Kawthar. (Surah Al-Kawthar 108:1)"
+        },
+        {
+            arabic: "يُحِبُّهُمْ وَيُحِبُّونَهُۥ",
+            bangla: "আল্লাহ তাদের ভালোবাসেন এবং তারা আল্লাহকে ভালোবাসে।",
+            english: "He loves them and they love Him. (Surah Al-Maidah 5:54)"
+        }
+    ],
+    impatient: [
+        {
+            arabic: "إِنَّ اللّهَ مَعَ الصَّابِرِينَ",
+            bangla: "নিশ্চয়ই আল্লাহ ধৈর্যশীলদের সঙ্গে আছেন।",
+            english: "Indeed, Allah is with those who are patient. (Surah Al-Baqarah 2:153)"
+        },
+        {
+            arabic: "فَصْبِرْ صَبْرًا جَمِيلًا",
+            bangla: "অতএব, সুন্দর ধৈর্য ধারণ করো।",
+            english: "So be patient with a beautiful patience. (Surah Al-Ma'arij 70:5)"
+        },
+        {
+            arabic: "وَمَا صَبَرَكَ إِلَّا بِاللَّهِ",
+            bangla: "তুমি কেবল আল্লাহর সাহায্যে ধৈর্য ধারণ করো।",
+            english: "And your patience is only with the help of Allah. (Surah An-Nahl 16:127)"
+        },
+        {
+            arabic: "وَسَيَجْعَلُ اللَّهُ بَعْدَ عُسْرٍ يُّسْرًا",
+            bangla: "আর আল্লাহ সহজ করে দিবেন, কঠিনতার পর সহজতা।",
+            english: "And Allah will make, after hardship, ease. (Surah At-Talaq 65:7)"
+        },
+        {
+            arabic: "يُحِبُّهُمْ وَيُحِبُّونَهُ",
+            bangla: "আল্লাহ তাদের ভালোবাসেন এবং তারা আল্লাহকে ভালোবাসে।",
+            english: "He loves them and they love Him. (Surah Al-Maidah 5:54)"
+        },
+        {
+            arabic: "إِنَّ اللَّهَ يَحْبُّ الصَّابِرِينَ",
+            bangla: "নিশ্চয়ই আল্লাহ ধৈর্যশীলদের ভালোবাসেন।",
+            english: "Indeed, Allah loves the patient. (Surah Aal-E-Imran 3:146)"
+        },
+        {
+            arabic: "لَا تَحْزَنِ إِنَّ اللّهَ مَعَنَا",
+            bangla: "কোনো দুঃখিত হইও না, নিশ্চয় আল্লাহ আমাদের সাথে আছেন।",
+            english: "Do not grieve. Indeed, Allah is with us. (Surah At-Tawbah 9:40)"
+        },
+        {
+            arabic: "وَعَجَلْتُ إِلَيْكَ رَبِّ لِتَرْضَى",
+            bangla: "হে আমার প্রভু, আমি তোমার কাছে দ্রুত ফিরে এসেছি যাতে তুমি সন্তুষ্ট হও।",
+            english: "And I hastened to You, my Lord, that You might be pleased. (Surah Ta-Ha 20:84)"
+        }
+    ],
+    indecisive: [
+        {
+            arabic: "وَإِذَا عَزَمْتَ فَتَوَكَّلْ عَلَى اللّهِ إِنَّ اللّهَ يُحِبُّ ٱلْمُتَوَكِّلِينَ",
+            bangla: "তুমি যখন কোনো সিদ্ধান্ত নাও, তখন আল্লাহর উপর ভরসা করো। নিশ্চয় আল্লাহ ভরসা করারদের ভালোবাসেন।",
+            english: "And when you have decided, then rely upon Allah. Indeed, Allah loves those who rely [upon Him]. (Surah Aal-E-Imran 3:159)"
+        },
+        {
+            arabic: "إِنَّ مَعَ ٱلْعُسْرِ يُسْرًۭا",
+            bangla: "অতএব, কঠিন সময়ের সঙ্গে সহজতা থাকবে।",
+            english: "For indeed, with hardship [will be] ease. (Surah Ash-Sharh 94:6)"
+        },
+        {
+            arabic: "وَمَا تَوْفِيقِىٓ إِلَّا بِاللَّهِ",
+            bangla: "আমার সাফল্য কেবল আল্লাহর সাহায্যেই।",
+            english: "And my success is not but through Allah. (Surah Hud 11:88)"
+        },
+        {
+            arabic: "فَإِذَا عَزَمْتَ فَتَوَكَّلْ عَلَى اللّهِ إِنَّ اللّهَ يُحِبُّ ٱلْمُتَوَكِّلِينَ",
+            bangla: "তুমি যখন একটি সিদ্ধান্ত নাও, তখন আল্লাহর উপর ভরসা করো।",
+            english: "And when you have decided, then rely upon Allah. Indeed, Allah loves those who rely [upon Him]. (Surah Aal-E-Imran 3:159)"
+        },
+        {
+            arabic: "يَسْتَجِيبُ لَكُمْ أَمْرَكُمْ إِن كُنتُمْ صَادِقِينَ",
+            bangla: "যদি তোমরা সত্যবাদী হও, তবে আল্লাহ তোমাদের দোয়া কবুল করবেন।",
+            english: "He will answer your prayer if you are truthful. (Surah Al-Ahzab 33:24)"
+        },
+        {
+            arabic: "وَلَا تَقْنَطُوا مِن رَّحْمَةِ اللَّهِ",
+            bangla: "আল্লাহর রহমত থেকে হতাশ হও না।",
+            english: "And do not despair of the mercy of Allah. (Surah Az-Zumar 39:53)"
+        },
+        {
+            arabic: "إِنَّ اللّهَ يُحِبُّ أَنْ يُؤْتِيَ عَبْدَهُۥ كُلَّ فِيٓهِ",
+            bangla: "আল্লাহ তাঁর বান্দাকে দানে পরিপূর্ণভাবে দান করতে ভালোবাসেন।",
+            english: "Indeed, Allah loves to grant His servant fully and completely. (Surah Al-Baqarah 2:261)"
+        }
+    ],
+    insecure: [
+        {
+            arabic: "إِنَّ اللّهَ مَعَنَا",
+            bangla: "নিঃসন্দেহে আল্লাহ আমাদের সঙ্গী।",
+            english: "Indeed, Allah is with us. (Surah At-Tawbah 9:40)"
+        },
+        {
+            arabic: "لَا تَحْزَنْ إِنَّ اللّهَ مَعَنَا",
+            bangla: "দুঃখিত হও না, নিশ্চয় আল্লাহ আমাদের সঙ্গে আছেন।",
+            english: "Do not grieve; indeed, Allah is with us. (Surah At-Tawbah 9:40)"
+        },
+        {
+            arabic: "مَن يَتَّقِ اللَّهَ يَجْعَلْ لَهُ مَخْرَجًا",
+            bangla: "যে আল্লাহকে ভয় করবে, আল্লাহ তাকে সংকট থেকে বের হওয়ার পথ দেবেন।",
+            english: "Whoever fears Allah - He will make a way for him to get out [from every difficulty]. (Surah At-Talaq 65:2)"
+        },
+        {
+            arabic: "وَمَن يَتَّقِ اللّهَ فَهُوَ حَسْبُهُ",
+            bangla: "আর যে আল্লাহকে ভয় করবে, তাঁর জন্যই যথেষ্ট।",
+            english: "And whoever fears Allah – He will make a way for him, and He is sufficient for him. (Surah At-Talaq 65:3)"
+        },
+        {
+            arabic: "وَعَسَىٰٓ أَن تَكْرَهُواٰ۟ شَيْـًۭٔا وَهُوَ خَيْرٌۭ لَّكُمْ",
+            bangla: "হয়তো তুমি কিছু পছন্দ কর না, অথচ সেটাই তোমার জন্য ভালো।",
+            english: "And perhaps you dislike something while it is good for you. (Surah Al-Baqarah 2:216)"
+        },
+        {
+            arabic: "إِنَّ اللّهَ لَا يُحِبُّ مَنْ يَكُونُ فِي قَلْبِهِ رِيَاءٌ",
+            bangla: "নিঃসন্দেহে আল্লাহ তাদেরকে ভালোবাসেন না, যারা হৃদয়ে শত্রুতা ও দ্বৈততা রাখে।",
+            english: "Indeed, Allah does not love those who have hypocrisy in their hearts. (Surah An-Nisa 4:38)"
+        },
+        {
+            arabic: "وَمَن يَتَّقِ اللّهَ يُكَفِّرْ عَنْهُ سَيِّئَاتِهِ وَيُعْظِمْ لَهُ أَجْرًۭا",
+            bangla: "আর যে আল্লাহকে ভয় করবে, আল্লাহ তার সব পাপ মাফ করবেন এবং তাকে বড় পুরস্কার দেবেন।",
+            english: "And whoever fears Allah – He will remove his misdeeds and increase for him his reward. (Surah At-Talaq 65:5)"
+        },
+        {
+            arabic: "وَمَن يَتَّقِ اللّهَ يَجْعَلْ لَهُ مِنْ أَمْرِهِ يُسْرًۭا",
+            bangla: "আর যে আল্লাহকে ভয় করবে, আল্লাহ তার জন্য তার ব্যাপারে সহজতা সৃষ্টি করবেন।",
+            english: "And whoever fears Allah - He will make his matter easy for him. (Surah At-Talaq 65:4)"
+        },
+        {
+            arabic: "وَمَا بِكُم مِّن نِّعْمَةٍۢ فَمِنَ ٱللَّهِ",
+            bangla: "যে কোনো উপকারিতা তোমাদের কাছে রয়েছে, তা আল্লাহর কাছ থেকে।",
+            english: "And whatever of favor is from Allah. (Surah An-Nahl 16:53)"
+        },
+        {
+            arabic: "إِنَّ اللَّهَ لَا يُغَيِّرُ مَا بِقَوْمٍۢ حَتَّىٰ يُغَيِّرُواٰ۟ مَا بِأَنفُسِهِمْ",
+            bangla: "নিঃসন্দেহে আল্লাহ কোনো জাতির ভাগ্য পরিবর্তন করেন না, যতক্ষণ না তারা নিজেদের ভাগ্য পরিবর্তন করে।",
+            english: "Indeed, Allah will not change the condition of a people until they change what is in themselves. (Surah Ar-Ra’d 13:11)"
+        }
+    ],
+    irritated: [
+        {
+            arabic: "وَصَابِرُوا۟ وَصَابِرُوا۟ وَرَابِطُوا۟ وَاتَّقُوا۟ ٱللَّهَ لَعَلَّكُمْ تُفْلِحُونَ",
+            bangla: "আর ধৈর্য ধারণ করো, ধৈর্য ধারণ করো, এবং আল্লাহকে ভয় করো, যাতে তোমরা সফল হতে পারো।",
+            english: "And be patient, and enjoin patience, and fear Allah that you may succeed. (Surah Aal-E-Imran 3:200)"
+        },
+        {
+            arabic: "إِنَّمَا يُوَفَّىٰٓ صَابِرُونَ أَجْرَهُمْ بِغَيْرِ حِسَابٍ",
+            bangla: "শুধু ধৈর্য ধারণকারীরা তাদের পুরস্কার তাদের হিসাব ছাড়া পাবে।",
+            english: "Indeed, the patient will be given their reward without account. (Surah Az-Zumar 39:10)"
+        },
+        {
+            arabic: "وَقُلْ رَبُّ أَعُوذُ بِكَ مِنْ هَمَزَٰتِ ٱلشَّيَٰطِينِ وَأَعُوذُ بِكَ رَبِّ أَن يَحْضُرُونِ",
+            bangla: "এবং বলো, আমার প্রভু, আমি শয়তানের মন্দ প্রভাবে আপনার আশ্রয় চাই এবং আমি আশ্রয় চাই যে তারা আমার সামনে উপস্থিত হোক।",
+            english: "And say, 'My Lord, I seek refuge in You from the whisperings of the devils, and I seek refuge in You, my Lord, from their presence.' (Surah Al-Mu’minun 23:97)"
+        },
+        {
+            arabic: "وَلَا تَسْتَفْتِحُوٓا۟ فِيهِ وَلَا تَحْزَنُوا۟ وَفَرَّجُوا۟ عَنِّي",
+            bangla: "এবং তাদের মধ্যে সান্ত্বনা খুঁজে না পাওয়ার কারণে দুঃখিত হইও না, বরং আল্লাহর প্রতি বিশ্বাস রাখো।",
+            english: "And do not grieve, indeed Allah is with us. (Surah At-Tawbah 9:40)"
+        },
+        {
+            arabic: "وَلَا تَقْتُلُوا۟ أَنفُسَكُمْ إِنَّ ٱللَّهَ كَانَ بِكُمْ رَحِيمًۭا",
+            bangla: "আর তোমরা নিজেদের ক্ষতি করোনো না, নিশ্চয় আল্লাহ তোমাদের প্রতি দয়ালু।",
+            english: "And do not kill yourselves. Indeed, Allah is to you ever Merciful. (Surah An-Nisa 4:29)"
+        },
+        {
+            arabic: "وَفَجَّرْنَا ٱلْبِحَارَ لِيُغْرِقُونَ",
+            bangla: "এবং আমরা সাগরগুলোকে প্রবাহিত করেছি যাতে তারা ডুবে যায়।",
+            english: "And We caused the seas to flow in order to drown them. (Surah Al-Buruj 85:10)"
+        },
+        {
+            arabic: "إِنَّ اللَّهَ مَعَ ٱلصَّابِرِينَ",
+            bangla: "নিঃসন্দেহে আল্লাহ ধৈর্যধারণকারীদের সাথে আছেন।",
+            english: "Indeed, Allah is with the patient. (Surah Al-Baqarah 2:153)"
+        },
+        {
+            arabic: "وَإِذَا مَرَّتْ عَلَيْهِمُ ٱلَّذِكْرَىٰ فَذَكَّرُوهُمْ فِي ٱلْمُصْنَعِ",
+            bangla: "আর যখন তাদের ওপর উপদেশ আসে, তাদের উপদেশ দিতে থাকো, এমনকি তাদের মনে শান্তি ফিরে আসবে।",
+            english: "And when reminders come to them, remind them. (Surah At-Tawbah 9:12)"
+        },
+        {
+            arabic: "وَعَسَىٰٓ أَن تَكْرَهُواٰ۟ شَيْـًۭٔا وَهُوَ خَيْرٌۭ لَّكُمْ",
+            bangla: "হয়তো তুমি কিছু পছন্দ কর না, অথচ সেটাই তোমার জন্য ভালো।",
+            english: "And perhaps you dislike something while it is good for you. (Surah Al-Baqarah 2:216)"
+        }
+    ],
+    jealous: [
+        {
+            arabic: "وَلَا تَمْنُوا۟ بُرَكَاتِ اللَّهِ عَلَىٰٓ بَعْضِكُمْ عَلَىٰٓ بَعْضٍۢ ۚ لِلرِّجَالِ نَصِيبٌۭ مِّمَّا اكْتَسَبُوا۟ وَلِلنِّسَآءِ نَصِيبٌۭ مِّمَّا اكْتَسَبْنَ ۚ وَسْءَلُوا۟ ٱللَّهَ مِنْ فَضْلِهِۦٓ إِنَّ ٱللَّهَ كَانَ بِكُلِّ شَىْءٍ عَلِيمًۭا",
+            bangla: "এবং আল্লাহর দানকৃত নিয়ামত একে অপরের মধ্যে ভাগাভাগি করে নেবেন না। পুরুষদের জন্য তাদের উপার্জনের অংশ আছে, এবং নারীদের জন্য তাদের উপার্জনের অংশ। এবং আল্লাহর কাছ থেকে তার বিশেষ দানের জন্য প্রার্থনা করুন। নিশ্চয় আল্লাহ সমস্ত কিছু জানেন।",
+            english: "And do not wish for that by which Allah has made some of you exceed others. For men is a share of what they have earned, and for women is a share of what they have earned. And ask Allah of His grace. Indeed, Allah is ever, of all things, Knowing. (Surah An-Nisa 4:32)"
+        },
+        {
+            arabic: "أَمْ يَحْسُدُونَ النَّاسَ عَلَىٰ مَآ ءَاتَٰهُمُ ٱللَّهُ مِنْ فَضْلِهِۦ ۚ فَقَدْ ءَاتَيْنَآ ءَالَٰٓبَرَٰهِيمَ ٱلْكِتَٰبَ وَٱلْحِكْمَةَ وَءَاتَيْنَٰهُمُلْكًۭا عَظِيمًۭا",
+            bangla: "তারা কি লোকদের ঈর্ষা করে, আল্লাহ যাদেরকে তাঁর অনুগ্রহ দিয়েছেন? অথচ আমরা ইবরাহিমের পরিবারকে কিতাব এবং হিকমত দিয়েছি এবং তাদেরকে মহৎ রাজত্ব দিয়েছি।",
+            english: "Or do they envy the people for what Allah has given them of His favor? But We had already given the family of Abraham the Scripture and wisdom and conferred upon them a great kingdom. (Surah An-Nisa 4:54)"
+        },
+        {
+            arabic: "يَحْسُدُونَ ٱلَّذِينَ ءَامَنُوا۟ وَيَشْرَبُونَ فِى أَمْوَٰلِهِۦۤ وَيَحْسُدُونَ مَنْ كَانَ ٱلۡمُؤْمِنِينَ فِى دِينِهِۦٰ",
+            bangla: "তারা ঈমানদারদের এবং যারা তাদের সম্পদে শুদ্ধতার সাথে জীবন অতিবাহিত করছে, তাদের প্রতি ঈর্ষা অনুভব করে।",
+            english: "They envy those who believe and walk in righteousness. (Surah Al-Baqarah 2:109)"
+        },
+        {
+            arabic: "وَلَا تَحْسُدُوا۟ۖۚ وَاللَّهُ يَرْزُقُ مَن يَشَاءُ بِغَيْرِ حِسَابٍ",
+            bangla: "এবং ঈর্ষা করো না; আল্লাহ যাকে ইচ্ছা, তার খুশি মতে রিজিক দেন।",
+            english: "And do not envy; Allah provides to whom He wills without account. (Surah Al-Fath 48:11)"
+        },
+        {
+            arabic: "وَٱلۡعَيْنُ تَفِيٓءُٓ إِلَىٰ حُبِّهِۦۥ فَٱلْيَقِينِ مَنَ الْأُمُورِ",
+            bangla: "চোখের দৃষ্টি শুধুমাত্র আল্লাহর প্রতি ভালোবাসা ও স্নেহের দিকে নিবদ্ধ থাকে।",
+            english: "And the eye inclines to His love with certainty in matters. (Surah An-Nur 24:51)"
+        },
+        {
+            arabic: "وَإِنْ تَفُؤُا۟ إِلَىٰٓ جَزِيرَةٍۢ مِنَ ٱلْأَرْضِ أَوْ تُبَٰطِئُٓا۟ۖ",
+            bangla: "যদি তোমরা একটুখানি শান্তি বা বিরতি চাও, তবে আল্লাহর প্রশংসা চাও।",
+            english: "If you seek some ease, then seek praise from Allah. (Surah An-Nisa 4:130)"
+        },
+        {
+            arabic: "فَسَتَفْهَمُونَ أَنَّ اللَّهَ بَعَثَكُمۡ فِى هَٰٓتَكُمْ فِى جُحۡرٍۢ",
+            bangla: "তবে তোমরা বুঝতে পারবে, আল্লাহ তোমাদের সামর্থ্যের জন্যই নির্বাচন করেছেন।",
+            english: "But you will understand that Allah has chosen you for your purpose. (Surah An-Nisa 4:100)"
+        },
+        {
+            arabic: "وَلَا تَحْسُدُوا۟ أَنْفُسَكُمْ إِلَّا بِاللَّهِ",
+            bangla: "নিজেদের উপর ঈর্ষা করা উচিত নয়, তবে আল্লাহর ইচ্ছায়।",
+            english: "Do not envy one another, but only by Allah’s will. (Surah At-Tawbah 9:51)"
+        }
+    ],
+    lazy: [
+        {
+            arabic: "إِنَّ ٱللَّهَ لَا يُحِبُّ ٱلۡمُعْتَدِينَ",
+            bangla: "নিশ্চয়ই আল্লাহ অবাধ্য ও অলসতা পছন্দ করেন না।",
+            english: "Indeed, Allah does not like the transgressors (those who do wrong). (Surah Al-Baqarah 2:190)"
+        },
+        {
+            arabic: "وَقُلِ ٱعْمَلُوا۟ فَسَيَرَىٰٓ ٱللَّهُ عَمَلَكُمْ وَرَسُولُهُۥ وَٱلْمُؤْمِنُونَ",
+            bangla: "তুমি বল, কাজ করো। আল্লাহ, তাঁর রাসূল এবং মুমিনরা তোমাদের কাজ দেখতে পাবেন।",
+            english: "Say, 'Work, and Allah will see your work, and so will His Messenger and the believers.' (Surah At-Tawbah 9:105)"
+        },
+        {
+            arabic: "فَإِذَا فَرَغْتَ فَانصَبْ وَإِلَىٰ رَبِّكَ فَارْغَبْ",
+            bangla: "তবে যখন তুমি কাজ শেষ করো, তখন নিজের কাজে মনোযোগ দাও এবং আল্লাহর দিকে মনোযোগী হও।",
+            english: "So when you have finished, then stand up for the worship, and to your Lord direct your longing. (Surah Al-Inshirah 94:7-8)"
+        },
+        {
+            arabic: "وَٱلۡعَٰمِلُونَ وَٱلۡمُؤْمِنُونَ فَأُو۟لَـٰٓئِكَ فِى جَنَّةٍۢ عَادِلَةٍۢ",
+            bangla: "তবে যারা কাজ করে এবং বিশ্বাসী থাকে, তারা সরাসরি সত্য পথে পৌঁছাবে।",
+            english: "But those who work deeds of righteousness and believe will be in gardens of bliss. (Surah Al-Buruj 85:11)"
+        },
+        {
+            arabic: "وَٱلَّذِينَ جَٰهِدُوا۟ فِينا لَنَهْدِيَنَّهُمْ سُبُلَنَا وَإِنَّ ٱللَّهَ لَمَعَ ٱلۡمُحْسِنِينَ",
+            bangla: "আর যারা আমাদের জন্য সংগ্রাম করবে, তাদের আমরা আমাদের পথ প্রদর্শন করব এবং নিশ্চয়ই আল্লাহ সৎকর্মীদের সাথে থাকেন।",
+            english: "And those who strive for Us - We will guide them to Our ways. And indeed, Allah is with the doers of good. (Surah Al-Ankabut 29:69)"
+        },
+        {
+            arabic: "وَلَا تَكُونُوا۟ كَٱلَّذِينَ نَسُوا۟ ٱللَّهَ فَفَٰتَهُمْ أَنفُسَهُمْ ۚ أُو۟لَـٰٓئِكَ هُمُ ٱلْفٰسِقُونَ",
+            bangla: "তবে তোমরা তাদের মতো হতে চেয়ো না, যারা আল্লাহকে ভুলে গিয়েছিল এবং তাদের নিজেদের আত্মাকে ক্ষতিগ্রস্ত করেছিল। তারা অবশ্যই ফাসিক (পাপী)।",
+            english: "And do not be like those who forgot Allah, and He made them forget themselves. It is they who are the defiantly disobedient. (Surah Al-Hashr 59:19)"
+        },
+        {
+            arabic: "وَقُولُوا۟ لِلنَّاسِ حُسْنًۭا",
+            bangla: "এবং মানুষের সাথে সদ্ভাবে কথা বলো।",
+            english: "And speak to people good. (Surah Al-Baqarah 2:83)"
+        },
+        {
+            arabic: "وَفِيٓ سَمَاءِهِۦ لِىٰهِۦ",
+            bangla: "আর তিনি আকাশে আপনার জন্য দয়া রেখেছেন।",
+            english: "And in the sky, there is a mercy for you. (Surah Al-Mulk 67:15)"
+        },
+        {
+            arabic: "وَلَا تَكُونُوا۟ جَامِعِينَ فِي الْبَذَلِ فَذَٰٓلِكَ فِيهِ شَيْءٌۢ",
+            bangla: "অতএব আল্লাহ তাআলা তার কাছে কিছু দেয়, তখন তা কাজের জন্য উপকারী হয়ে থাকে।",
+            english: "And do not be wasteful in spending, for that is harmful. (Surah Al-Araf 7:31)"
+        }
+    ],
+    lonely: [
+        {
+            arabic: "فَإِنَّ مَعَ ٱلْعُسْرِ يُسْرًۭا",
+            bangla: "কঠিনতার সাথে সহজতা রয়েছে।",
+            english: "For indeed, with hardship comes ease. (Surah Ash-Sharh 94:6)"
+        },
+        {
+            arabic: "إِنَّ اللَّـهَ مَعَ ٱلصَّـٰبِرِينَ",
+            bangla: "নিশ্চয়ই আল্লাহ ধৈর্যশীলদের সাথে আছেন।",
+            english: "Indeed, Allah is with the patient. (Surah Al-Baqarah 2:153)"
+        },
+        {
+            arabic: "إِنَّمَا أَنتَ مُنذِرٌۢ وَلِكُلِّ قَوْمٍۢ هَادٍۢ",
+            bangla: "নিশ্চয়ই তুমি শুধুমাত্র সতর্ককারী, আর প্রতিটি জাতির জন্য একজন পথপ্রদর্শক রয়েছে।",
+            english: "Indeed, you are but a warner, and for every people is a guide. (Surah Ar-Ra'd 13:7)"
+        },
+        {
+            arabic: "وَمَنۡ يَتَّقِ ٱللَّهَ يَجْعَلْ لَهُۥ مَخْرَجًۭا",
+            bangla: "যে ব্যক্তি আল্লাহকে ভয় করে, আল্লাহ তার জন্য পথ বের করবেন।",
+            english: "And whoever fears Allah - He will make a way for him to get out [from every difficulty]. (Surah At-Talaq 65:2)"
+        },
+        {
+            arabic: "وَإِذَا سَأَلَكَ عِبَادِىٓ عَنِّىۖ فَإِنِّىۡ قَرِيبٌۭ أُجِيبُ دَعْوَةَ الدَّاعِ إِذَا دَعَانِ",
+            bangla: "আর যখন আমার বান্দারা তোমার কাছে আমার বিষয়ে প্রশ্ন করে, তখন তোমাকে বলতে হবে যে আমি নিকটবর্তী। আমি যখন ডাকবো, তখন দুঃখিত বান্দার ডাক শোনে।",
+            english: "And when My servants ask you concerning Me, indeed I am near. I respond to the invocation of the supplicant when he calls upon Me. (Surah Al-Baqarah 2:186)"
+        },
+        {
+            arabic: "وَٱصْبِرْ عَلَىٰ مَآ أَصَابَكَۖ إِنَّ ذَٰلِكَ مِنْ عَزْمِ ٱلْأُمُورِ",
+            bangla: "তুমি যে পরিস্থিতিতে আছ, সেখানে দৃঢ় থাকো, কেননা এটি কঠিন কাজ।",
+            english: "And be patient over what befalls you. Indeed, that is of the matters [requiring] determination. (Surah Luqman 31:17)"
+        },
+        {
+            arabic: "وَلَا تَحْزَنۡ إِنَّ ٱللَّهَ مَعَنَا",
+            bangla: "এবং দুঃখিত হয়ো না, নিশ্চয়ই আল্লাহ আমাদের সাথে আছেন।",
+            english: "And do not grieve. Indeed, Allah is with us. (Surah At-Tawbah 9:40)"
+        },
+        {
+            arabic: "إِنَّمَا ٱلْمُؤْمِنُونَۖ إِخْوَةٌۭ فَأَصْلِحُوا۟ بَيْنَ أَخَوَيْكُمْ",
+            bangla: "আল্লাহর পথে একে অপরকে সাহায্য করো, এবং তোমাদের মধ্যে সম্পর্ক স্থাপন করো।",
+            english: "Indeed, the believers are but brothers, so make peace between your brothers. (Surah Al-Hujurat 49:10)"
+        },
+        {
+            arabic: "وَتَوَكَّلْ عَلَىٰ ٱللَّهِ ۚ وَٱللَّهُ بِهِۦ مَا تَعْمَلُونَ خَبِيرٌۭ",
+            bangla: "আর আল্লাহর ওপর ভরসা রাখো, নিশ্চয়ই আল্লাহ তোমাদের কাজের খবর রাখেন।",
+            english: "And rely upon Allah, and Allah is all-aware of what you do. (Surah Al-Imran 3:159)"
+        }
+    ],
+    love: [
+        {
+            arabic: "قُلْ إِن كُنتُمْ تُحِبُّونَ ٱللَّهَ فَٱتَّبِعُونِىۖ يُحْبِبْكُمُ ٱللَّهُ وَيَغْفِرْ لَكُمْ ذُنُوبَكُمْ ۚ وَٱللَّهُ غَفُورٌۭ رَّحِيمٌۭ",
+            bangla: "বল, ‘যদি তোমরা আল্লাহকে ভালোবাসো, তবে আমাকে অনুসরণ করো; আল্লাহ তোমাদেরকে ভালোবাসবেন এবং তোমাদের গুনাহ মাফ করবেন।’ আল্লাহ পরম ক্ষমাশীল, পরম দয়ালু।",
+            english: "Say, 'If you should love Allah, then follow me, and Allah will love you and forgive you your sins. And Allah is Forgiving and Merciful.' (Surah Al-Imran 3:31)"
+        },
+        {
+            arabic: "وَجَعَلۡنَاۤ بَيْنَكُمْ مَّوَدَّةًۭ وَرَحْمَةًۭ ۗ إِنَّ فِى ذَٰلِكَ لَٰيَٰتٍ لِّقَوْمٍۢ يَتَفَكَّرُونَ",
+            bangla: "এবং আমরা তোমাদের মধ্যে ভালবাসা এবং দয়া সৃষ্টি করেছি। এতে নিশ্চয়ই চিন্তা করার জন্য চিন্তা করার লোকদের জন্য নিদর্শন রয়েছে।",
+            english: "And We made between them [a] love and mercy. Indeed, in that are signs for a people who give thought. (Surah Ar-Rum 30:21)"
+        },
+        {
+            arabic: "إِنَّ ٱللَّهَ يُحِبُّ ٱلۡمُحۡسِنِينَ",
+            bangla: "নিশ্চয়ই আল্লাহ সৎকর্মশীলদেরকে ভালোবাসেন।",
+            english: "Indeed, Allah loves the doers of good. (Surah Al-Imran 3:134)"
+        },
+        {
+            arabic: "إِنَّ ٱللَّهَ يُحِبُّ ٱلۡمُتَّقِينَ",
+            bangla: "নিশ্চয়ই আল্লাহ পরহেজগারদেরকে ভালোবাসেন।",
+            english: "Indeed, Allah loves the righteous. (Surah At-Tawbah 9:4)"
+        },
+        {
+            arabic: "وَٱلَّذِينَ ءَامَنُوا۟ وَعَمِلُوا۟ ٱلصَّـٰلِحَٰتِ كَانَ لَهُمۡ جَنَّـٰتُ ٱلْنَّعِيمِ",
+            bangla: "যারা ঈমান এনেছে এবং সৎকর্ম করেছে, তাদের জন্য রয়েছে সুসজ্জিত বাগান।",
+            english: "And those who believed and did righteous deeds - for them are gardens of pleasure. (Surah Al-Buruj 85:11)"
+        },
+        {
+            arabic: "إِنَّمَا ٱلْمُؤْمِنُونَ إِخْوَةٌۭ فَأَصۡلِحُوا۟ بَيْنَ أَخَوَيۡكُمْ وَٱتَّقُوا۟ ٱللَّهَ لَعَلَّكُمۡ تُرْحَمُونَ",
+            bangla: "বিনিময়ে, মুমিনগণ পরস্পরের ভাই। অতএব তোমরা তোমাদের ভাইদের মধ্যে সম্প্রীতি স্থাপন করো এবং আল্লাহকে ভয় করো, যাতে তোমরা করুণার অধিকারী হও।",
+            english: "The believers are but brothers, so make peace between your brothers. And fear Allah that you may receive mercy. (Surah Al-Hujurat 49:10)"
+        },
+        {
+            arabic: "وَقَالَ رَبُّكُمُ ٱدْعُونِىٓ أَسْتَجِبْ لَكُمْ إِنَّ ٱلَّذِينَ يَسْتَكْبِرُونَ عَنْ عِبَادَتِى سَيَدْخُلُونَ جَهَنَّمَ دَاخِرِينَ",
+            bangla: "আর তোমাদের প্রভু বললেন, ‘তোমরা আমাকে ডাকো, আমি তোমাদের দোয়া কবুল করব। যারা আমার ইবাদত থেকে গর্ব করে, তারা শীঘ্রই লাঞ্ছিত হয়ে জাহান্নামে প্রবেশ করবে।’",
+            english: "And your Lord says, 'Call upon Me; I will respond to you. Indeed, those who disdain My worship will enter Hell in humiliation.' (Surah Ghafir 40:60)"
+        },
+        {
+            arabic: "لَا تُحْزِنْ ۖ إِنَّ ٱللَّهَ مَعَنَا",
+            bangla: "দুঃখিত হয়ো না, নিশ্চয়ই আল্লাহ আমাদের সাথে আছেন।",
+            english: "Do not grieve. Indeed, Allah is with us. (Surah At-Tawbah 9:40)"
+        },
+        {
+            arabic: "إِنَّ ٱللَّهَ يُحِبُّ ٱلۡمُتَوَكِّلِينَ",
+            bangla: "নিশ্চয়ই আল্লাহ বিশ্বাস স্থাপনকারীদেরকে ভালোবাসেন।",
+            english: "Indeed, Allah loves those who rely [on Him]. (Surah Al-Imran 3:159)"
+        },
+        {
+            arabic: "وَأَمَّا مَنۡ آمَنَ وَعَمِلَ صَـٰلِحًۭا فَلَهُۥٓ جَزَاءٌۭ غَيْرُ مَمْنُونٍ",
+            bangla: "আর যিনি ঈমান আনেন এবং সৎকর্ম করেন, তার জন্য আছে অশেষ পুরস্কার।",
+            english: "But those who believe and do righteous deeds - for them is a reward uninterrupted. (Surah Al-Insan 76:11)"
+        },
+        {
+            arabic: "إِنَّ اللَّهَ غَفُورٌۭ رَّحِيمٌۭ",
+            bangla: "নিশ্চয়ই আল্লাহ পরম ক্ষমাশীল, পরম দয়ালু।",
+            english: "Indeed, Allah is Forgiving and Merciful. (Surah At-Tawbah 9:104)"
+        },
+        {
+            arabic: "وَقُلۡ لِلۡمُؤْمِنِينَ يَغُضُّوا۟ مِنْ أَبْصَارِهِمْ وَيَحْفَظُوا۟ فُرُوجَهُمْ ۚ ذَٰلِكَ أَزْكَىٰ لَهُمْ ۚ إِنَّ ٱللَّهَ خَبِيرٌۭ بِمَا يَصْنَعُونَ",
+            bangla: "এবং মুমিনদেরকে বল, তারা যেন তাদের দৃষ্টি সংযত রাখে এবং নিজেদের লজ্জাস্থান রক্ষা করে। এটি তাদের জন্য শুদ্ধতর। নিশ্চয়ই আল্লাহ জানেন যা তারা করে।",
+            english: "And tell the believing men to lower their gaze and guard their private parts. That is purer for them. Indeed, Allah is Acquainted with what they do. (Surah An-Nur 24:30)"
+        }
+    ],
+    nervous: [
+        {
+            arabic: "فَإِنَّ مَعَ ٱلۡعُسْرِ يُسْرًا",
+            bangla: "অবশ্যই, কঠিনের সাথে সহজতাও রয়েছে।",
+            english: "For indeed, with hardship [will be] ease. (Surah Ash-Sharh 94:6)"
+        },
+        {
+            arabic: "إِنَّ مَعَ ٱلۡعُسْرِ يُسْرًۭا",
+            bangla: "নিশ্চয়ই, কঠিনের সাথে সহজতাও রয়েছে।",
+            english: "Indeed, with hardship comes ease. (Surah Ash-Sharh 94:7)"
+        },
+        {
+            arabic: "وَمَنۡ يَتَّقِ ٱللَّهَ يَجْعَل لَّهُۥۤ مَخْرَجًۭا",
+            bangla: "এবং যিনি আল্লাহকে ভয় করবে, আল্লাহ তার জন্য সহজ পথ তৈরি করবেন।",
+            english: "And whoever fears Allah - He will make a way for him to get out [from every difficulty]. (Surah At-Talaq 65:2)"
+        },
+        {
+            arabic: "وَتَوَكَّلْتُ عَلَى ٱللَّهِۖ إِنَّ ٱللَّهَ رَبُّىۥ وَّرَبُّكُمْۖ",
+            bangla: "আমি আল্লাহর উপর ভরসা রাখি, নিশ্চয়ই আল্লাহ আমারও প্রভু, তোমাদেরও প্রভু।",
+            english: "And I have put my trust in Allah. Indeed, Allah is my Lord and your Lord. (Surah Ibrahim 14:11)"
+        },
+        {
+            arabic: "إِنَّ ٱللَّهَ مَعَنَا",
+            bangla: "নিশ্চয়ই আল্লাহ আমাদের সাথে আছেন।",
+            english: "Indeed, Allah is with us. (Surah At-Tawbah 9:40)"
+        },
+        {
+            arabic: "فَإِنَّمَا ٱلۡوُسْوَسَةُ مِنَ ٱلشَّيْطَٰنِ لِيَحْزُنَ ٱلَّذِينَ ءَامَنُوا۟",
+            bangla: "নিশ্চয়ই, শয়তানের ফুঁসফুঁস কাজ করছে মুমিনদের দুঃখিত করার জন্য।",
+            english: "Indeed, the whispering [of Satan] is only to grieve those who have believed. (Surah Al-Mujadila 58:10)"
+        },
+        {
+            arabic: "وَمَا تَوْفِيقِىٓ إِلَّا بِٱللَّهِ",
+            bangla: "আমার সফলতা শুধুমাত্র আল্লাহর সাহায্যে।",
+            english: "And my success is not but through Allah. (Surah Hud 11:88)"
+        },
+        {
+            arabic: "إِنَّ مَعَ ٱلۡعُسْرِ يُسْرًۭا",
+            bangla: "কঠিনের সাথে সহজতাও রয়েছে।",
+            english: "For indeed, with hardship comes ease. (Surah Ash-Sharh 94:7)"
+        },
+        {
+            arabic: "يُسِرُّكُمۡ فَٱلۡمَفۡزَعُۖ وَإِذَا صَرَّحَ ٱللَّهُ بِالۡبَيَٰنِ",
+            bangla: "আল্লাহ যখন নির্দেশ দেন, তখন সৃষ্টিকর্তা অবশ্যই সাহায্য করেন।",
+            english: "Allah will grant you ease and relieve your distress when He commands. (Surah Ash-Sharh 94:5)"
+        },
+        {
+            arabic: "وَصَبَرُوا۟ عَلَىٰ مَآ ءَابَاؤُهُۥ مِنَ ٱلۡمُؤْمِنِينَ",
+            bangla: "তারা পরকালেও আল্লাহর সহায়তায় সাফল্য পাবে।",
+            english: "And they were patient with what their forefathers endured. (Surah Al-Mulk 67:15)"
+        }
+    ],
+    nostalgic: [
+        {
+            arabic: "فَذُوقُوا۟ بِمَا نَسِيتُمْ لِقَآءَ يَوْمِكُمْ إِنَّا نَسِينَٰكُمْ",
+            bangla: "তোমরা আজকের দিনের সাক্ষাৎ ভুলে গেছো, আজকে আমরা তোমাদের ভুলে গেছি।",
+            english: "Taste [the punishment] for what you forgot the meeting of this Day. Indeed, We have forgotten you. (Surah As-Sajdah 32:14)"
+        },
+        {
+            arabic: "وَٱللَّهُ يُحْيِىۦ وَيُمِيتُ وَإِلَيْهِ تُرْجَعُونَ",
+            bangla: "আর আল্লাহ জীবন দেন এবং মৃত্যু ঘটান এবং তারই কাছে তোমরা ফিরে যাবে।",
+            english: "And Allah gives life and causes death, and to Him is the [final] return. (Surah Al-Imran 3:158)"
+        },
+        {
+            arabic: "وَقَالُوا۟ يٰلَيْتَنَآ رَجَعْنَآ إِلَىٰ أَعْمَٰلِنَا لَا نُؤْمِنُ بِهِ",
+            bangla: "তারা বলেছিলো, আহ, যদি আমরা ফিরে যেতে পারতাম এবং আমাদের কাজগুলোকে সঠিকভাবে করতাম।",
+            english: "And they will say, 'If only we had returned [to our former state] and not disbelieved in it.' (Surah Al-A'raf 7:53)"
+        },
+        {
+            arabic: "وَذَكِّرْ فَإِنَّ ٱلذِّكْرَىٰ تَنفَعُ ٱلْمُؤْمِنِينَ",
+            bangla: "তাদের স্মরণ করিয়ে দাও, কারণ স্মরণ ঈমানদারদের উপকারে আসে।",
+            english: "And remind, for indeed, the reminder benefits the believers. (Surah Adh-Dhariyat 51:55)"
+        },
+        {
+            arabic: "وَمَآ أَصَابَكُم مِّنْ مُّصِيبَةٍۢ فِىۤ مَا كَسَبَتْ أَيْدِيكُمْ وَيَعْفُوا۟ عَن كَثِيرٍ",
+            bangla: "তোমাদের যা কিছু বিপদ আসে, তা তোমাদের হাতের কাজের ফল। তবে আল্লাহ অনেক কিছু মাফ করে দেন।",
+            english: "And whatever strikes you of disaster is for what your hands have earned; but He pardons much. (Surah Ash-Shura 42:30)"
+        },
+        {
+            arabic: "أَلَمْ يَأْتِكُمْ نَبَأُ الَّذِينَ مِن قَبْلِكُمْ",
+            bangla: "তোমাদের কি পূর্ববর্তীদের খবর আসে নাই?",
+            english: "Has the story reached you of those before you? (Surah Al-A'raf 7:101)"
+        },
+        {
+            arabic: "إِنَّمَآ أَمْوَٰلُكُمْ وَأَوْلَادُكُمْ فِتْنَةٌۭ وَٱللَّهُ عِندَهُۥٓ أَجْرٌ عَظِيمٌ",
+            bangla: "তোমাদের ধনসম্পদ ও সন্তানরা একটি পরীক্ষা। আর আল্লাহর কাছে রয়েছে মহান পুরস্কার।",
+            english: "Indeed, your wealth and your children are but a trial; and Allah has with Him a great reward. (Surah At-Taghabun 64:15)"
+        },
+        {
+            arabic: "وَقَالُوا۟ رَبُّنَآ إِنَّنَآ ءَامَنَّا فَٱغْفِرْ لَنَاۤ وَٱرْحَمْنَآ",
+            bangla: "এবং তারা বলেছিলো, হে আমাদের পালনকর্তা, আমরা বিশ্বাস করেছি, তাই আমাদের ক্ষমা করো এবং আমাদের প্রতি দয়া প্রদর্শন করো।",
+            english: "And they said, 'Our Lord, indeed we have believed, so forgive us and have mercy upon us.' (Surah Al-Imran 3:193)"
+        },
+        {
+            arabic: "فَٱلۡيَوْمَ لَا يُسْـَٔلُ عَنۡ شَئِئٍۢمَّآ دُونَ بِهِٖ إِلَّا قُتِلَٰهُ بِهِۦ",
+            bangla: "তবে আজকের দিনে কোন কিছুই প্রশ্ন করা হবে না, এর মধ্যে যে কেউ নিহত হবে।",
+            english: "So today no soul will be asked about another soul. (Surah Al-Araf 7:38)"
+        }
+    ],
+    offended: [
+        {
+            arabic: "وَٱلۡكَٰفِرُونَ فِى جَهَنَّمَ وَٱلۡمُحْتَسِبُونَ فِيهَاۚ",
+            bangla: "অবশ্যই, কাফেররা জাহান্নামে অবস্থান করবে এবং সেখানেই তাদের শাস্তি হবে।",
+            english: "Indeed, the disbelievers will be in Hell, and therein will they remain forever. (Surah Al-Baqarah 2:39)"
+        },
+        {
+            arabic: "وَٱللَّهُ سَمِيعٌ عَلِيمٌ",
+            bangla: "আর আল্লাহ শ্রবণকারী, জাননাকারী।",
+            english: "And Allah is All-Hearing, All-Knowing. (Surah Al-Mujadila 58:1)"
+        },
+        {
+            arabic: "وَإِذَا سَمِعُوا۟ لِلۡغِيبِ لَا يَأۡتُونَٓ فِيهِ وَلَا يَجۡتَنُونَ",
+            bangla: "আর যখন তারা গীবত শোনে, তারা তাতে অংশগ্রহণ করেন না, এবং তা থেকে দূরে থাকে।",
+            english: "And when they hear ill speech, they do not come near it or engage with it. (Surah Al-Furqan 25:72)"
+        },
+        {
+            arabic: "يَٰٓأَيُّهَا الَّذِينَ ءَامَنُوا۟ لَا يَسْخَرْ قَوْمٌۭ مِّنْ قَوْمٍۢ عَسَىٰٓ أَنۢ يَكُونُوا۟ خَيْرًا مِّنۡهُمْ",
+            bangla: "হে বিশ্বাসীরা! একটি জাতি যেন অন্য জাতির উপহাস না করে, একে অপরের মধ্যে ভালো কিছু হতে পারে।",
+            english: "O you who have believed, let not a people ridicule [another] people; perhaps they may be better than them. (Surah Al-Hujurat 49:11)"
+        },
+        {
+            arabic: "فَصَبْرٌ جَمِيلٌۢ وَٱللَّهُ ٱلۡمُسْتَعَانُ عَلَىٰ مَا تَصِفُونَ",
+            bangla: "তবে আমার সুন্দর ধৈর্য ধরবো এবং আল্লাহর সাহায্য লাভ করবো যা তোমরা বর্ণনা করছো।",
+            english: "So be patient with gracious patience, and Allah is the one sought for help against what you describe. (Surah Yusuf 12:18)"
+        },
+        {
+            arabic: "وَمَآ أَصَابَكُم مِّنْ مُّصِيبَةٍۢ فِىۤ مَا كَسَبَتْ أَيْدِيكُمْ وَيَعْفُوا۟ عَن كَثِيرٍ",
+            bangla: "যে বিপদই তোমাদের ওপর আসে তা তোমাদের হাতের কাজের ফল, তবে আল্লাহ অনেক কিছু ক্ষমা করেন।",
+            english: "And whatever strikes you of disaster is for what your hands have earned; but He pardons much. (Surah Ash-Shura 42:30)"
+        },
+        {
+            arabic: "وَقَالُوا۟ يٰلَيْتَنَآ رَجَعْنَآ إِلَىٰ أَعْمَٰلِنَا لَا نُؤْمِنُ بِهِ",
+            bangla: "তারা বলেছিলো, আহ, যদি আমরা ফিরে যেতে পারতাম এবং আমাদের কাজগুলোকে সঠিকভাবে করতাম।",
+            english: "And they will say, 'If only we had returned [to our former state] and not disbelieved in it.' (Surah Al-A'raf 7:53)"
+        },
+        {
+            arabic: "وَقُلۡ لِعِبَادِىٓ يَقُولُوا۟ ٱلَّتِى هِىَٓ أَحْسَنُ ۖ إِنَّ ٱلشَّيْطَٰنَ يَنزَغُ بَيْنَهُمْ",
+            bangla: "আর বলো, আমার বান্দারা, তারা যে কথা বলে তা ভালো কথা হোক, শয়তান তাদের মধ্যে বিভেদ সৃষ্টি করে।",
+            english: "And tell My servants to say that which is best. Indeed, Satan induces strife among them. (Surah Al-Isra 17:53)"
+        },
+        {
+            arabic: "وَلَا تَحْسَبُوا۟ۥٓ إِنَّ ٱلَّذِينَ قُتِلُوا۟ فِى سَبِيلِ ٱللَّهِ أَمْوَٰتًۭا بَلْ أَحْيَاءٌۭ عِندَ رَبِّهِمْ يُرْزَقُونَ",
+            bangla: "তবে যারা আল্লাহর পথে নিহত হয়েছে, তাদের মৃত মনে করো না, তারা তাদের প্রভুর কাছে জীবিত রয়েছে এবং তাদেরকে রিজিক দেওয়া হচ্ছে।",
+            english: "And do not think those who have been killed in the way of Allah are dead. Rather, they are alive with their Lord, receiving provision. (Surah Al-Imran 3:169)"
+        }
+    ],
+    overwhelmed: [
+        {
+            arabic: "إِنَّ مَعَ ٱلۡعُسۡرِ يُسۡرًا",
+            bangla: "নিঃসন্দেহে, কষ্টের সঙ্গে সহজতা রয়েছে।",
+            english: "Indeed, with hardship [will be] ease. (Surah Ash-Sharh 94:6)"
+        },
+        {
+            arabic: "فَإِنَّ مَعَ ٱلۡعُسۡرِ يُسۡرًا",
+            bangla: "নিঃসন্দেহে, কষ্টের সাথে আসবে সহজতা।",
+            english: "For indeed, with hardship [there will be] ease. (Surah Ash-Sharh 94:7)"
+        },
+        {
+            arabic: "رَّبُّنَا وَلَا تُحَمِّلْنَا مَا لَا طَاقَةَ لَنَا بِهِۚ",
+            bangla: "হে আমাদের রব! আমাদের উপর এমন কিছু চাপবেন না, যা আমরা সহ্য করতে পারি না।",
+            english: "Our Lord, and do not burden us with that which we have no ability to bear. (Surah Al-Baqarah 2:286)"
+        },
+        {
+            arabic: "وَلَا تَقُولُوا۟ لِمَنۡ يَقْتُلُونَ فِى سَبِيلِ ٱللَّهِ أَمۡوَٰتًۭاۚ",
+            bangla: "আর যাদের আল্লাহর পথে নিহত করেছেন, তাদের মৃত মনে কোরো না।",
+            english: "And do not say about those who are killed in the way of Allah, 'They are dead.' (Surah Al-Baqarah 2:154)"
+        },
+        {
+            arabic: "فَصَبْرٌ جَمِيلٌۢ وَٱللَّهُ ٱلۡمُسْتَعَانُ عَلَىٰ مَا تَصِفُونَ",
+            bangla: "তবে আমার সুন্দর ধৈর্য ধরবো এবং আল্লাহর সাহায্য লাভ করবো যা তোমরা বর্ণনা করছো।",
+            english: "So be patient with gracious patience, and Allah is the one sought for help against what you describe. (Surah Yusuf 12:18)"
+        },
+        {
+            arabic: "فَإِذَا فَرَغْتَ فَانصَبْ وَإِلَىٰ رَبِّكَ فَارْغَبْ",
+            bangla: "তোমার কাজ শেষ হলে, আল্লাহর উদ্দেশ্যে আগ্রহী হও।",
+            english: "So when you have finished [your duties], then stand up for worship, and to your Lord direct [your] longing. (Surah Al-Sharh 94:7-8)"
+        },
+        {
+            arabic: "إِنَّ اللَّهَ يُحِبُّ مَعِينَ الْمُؤْمِنِينَ فِىٰ دِينِهِۥ",
+            bangla: "আল্লাহ মু’মিনদের সাহায্য করতে ভালোবাসেন।",
+            english: "Indeed, Allah loves those who help others in their faith. (Surah Al-Imran 3:146)"
+        },
+        {
+            arabic: "وَقَالَ رَبُّكُمُ ٱدْعُونِىٓ أَسْتَجِبْ لَكُمْ",
+            bangla: "আর তোমাদের রব বলেছেন, আমাকে ডাকো, আমি তোমাদের ডাক শোনাবো।",
+            english: "And your Lord says, 'Call upon Me; I will respond to you.' (Surah Ghafir 40:60)"
+        }
+    ],
+    peaceful: [
+        {
+            arabic: "إِنَّمَا ٱلۡمُؤْمِنُونَ ٱلَّذِينَٓ إِذَا ذُكِرَ ٱللَّهُ وَجِلَتْ قُلُوبُهُمْ",
+            bangla: "আল্লাহর নাম স্মরণ করলে তাদের অন্তর শিউরে ওঠে, তারা হল প্রকৃত মুমিন।",
+            english: "Indeed, the believers are only those who, when Allah is mentioned, their hearts become fearful. (Surah Al-Anfal 8:2)"
+        },
+        {
+            arabic: "وَلَا تَقْتُلُوا۟ النَّفْسَ الَّتِي حَرَّمَ ٱللَّهُ إِلَّا بِٱلۡحَقِّ",
+            bangla: "আল্লাহ যাদের হত্যা করা নিষিদ্ধ করেছেন, তাদের হত্যা করো না, যদি না তা ন্যায্য হয়।",
+            english: "And do not kill the soul which Allah has forbidden, except by right. (Surah Al-Isra 17:33)"
+        },
+        {
+            arabic: "وَٱلۡجَنَّةُ لِرَأۡفَتِهِۦٓ أَبَدًۭا",
+            bangla: "আর তাঁর অনুগ্রহে, জান্নাত চিরকাল।",
+            english: "And paradise for His mercy, forever. (Surah At-Tawbah 9:72)"
+        },
+        {
+            arabic: "إِنَّ اللَّٰهَ يُحِبُّ ٱلۡمُتَّقِينَ",
+            bangla: "নিঃসন্দেহে, আল্লাহ সতর্কতাসম্পন্নদের ভালোবাসেন।",
+            english: "Indeed, Allah loves the righteous. (Surah Al-Imran 3:76)"
+        },
+        {
+            arabic: "إِنَّآ أَتَيْنَٰكِ فِى ٱلۡمُؤْمِنِينَ",
+            bangla: "আমরা তোমাদের শান্তি দান করি।",
+            english: "Indeed, We have granted you peace. (Surah Al-Imran 3:133)"
+        },
+        {
+            arabic: "يُحِبُّ ٱللَّهُ ٱلۡمُسْتَعِينِينَ",
+            bangla: "আল্লাহ তাদের ভালোবাসেন যারা সাহায্য চায়।",
+            english: "Allah loves those who seek help. (Surah Al-Baqarah 2:186)"
+        },
+        {
+            arabic: "فَصَبْرٌ جَمِيلٌۢ وَٱللَّهُ ٱلۡمُسْتَعَانُ عَلَىٰ مَا تَصِفُونَ",
+            bangla: "তবে সুন্দর ধৈর্য ধারণ করো, এবং আল্লাহ তোমাদের বর্ণনা অনুযায়ী সাহায্য প্রদান করবেন।",
+            english: "So be patient with gracious patience, and Allah is the one sought for help against what you describe. (Surah Yusuf 12:18)"
+        },
+        {
+            arabic: "إِنَّ اللَّهَ مَعَ ٱلصَّابِرِينَ",
+            bangla: "নিঃসন্দেহে, আল্লাহ ধৈর্যশীলদের সাথে আছেন।",
+            english: "Indeed, Allah is with the patient. (Surah Al-Baqarah 2:153)"
+        }
+    ],
+    rage: [
+        {
+            arabic: "وَقُل لِعِبَادِىۤ قُلۡوٓا۟ لِلنَّاسِ حُسۡنًۭا",
+            bangla: "আর তুমি আমার বান্দাদেরকে বলো, ‘মানুষদের সাথে সুন্দরভাবে কথা বলো।’",
+            english: "And tell My servants to speak that which is best. (Surah Al-Isra 17:53)"
+        },
+        {
+            arabic: "وَٱلۡكَاظِمِينَ ٱلۡغَيۡظَ وَٱلۡعَٰفِينَ عَنِ ٱلنَّاسِ",
+            bangla: "যারা তাদের রাগ নিবারণ করে এবং মানুষের প্রতি ক্ষমা প্রদর্শন করে।",
+            english: "And those who restrain anger and pardon people. (Surah Al-Imran 3:134)"
+        },
+        {
+            arabic: "وَلَا تَقُولُۥ لَهُمَآ أُفّٖ وَلَا تَنهَرْهُمَا وَقُل لَّهُمَا قَوْلًۭا كَرِيمًۭا",
+            bangla: "তাদেরকে উহ্ বলো না এবং তাদেরকে তিরস্কার করো না, বরং তাদের সাথে ভালো কথা বলো।",
+            english: "And do not say to them a word of disrespect and do not repel them, but speak to them a noble word. (Surah Al-Isra 17:23)"
+        },
+        {
+            arabic: "وَلَا تَقْتُلُوا۟ النَّفْسَ الَّتِي حَرَّمَ ٱللَّهُ إِلَّا بِٱلۡحَقِّ",
+            bangla: "আল্লাহ যাদের হত্যা করা নিষিদ্ধ করেছেন, তাদের হত্যা করো না, যদি না তা ন্যায্য হয়।",
+            english: "And do not kill the soul which Allah has forbidden, except by right. (Surah Al-Isra 17:33)"
+        },
+        {
+            arabic: "فَإِذَاۤ ٱلَّذِينَ قَالُوا۟ رَبُّنَآ ٱللَّهُ ثُمَّ اسْتَقَٰمُوا۟ فَلَا خَوۡفٌ عَلَيْهِمْ وَلَا هُمْ يَحْزَنُونَ",
+            bangla: "যারা বলেছিল, ‘আমাদের প্রভু হলেন আল্লাহ,’ তারপর তারা দৃঢ়ভাবে প্রতিষ্ঠিত হয়েছে, তাদের কোনো ভয় থাকবে না, এবং তারা শোকার্ত হবে না।",
+            english: "But those who say, 'Our Lord is Allah' and then remain steadfast – no fear will there be concerning them, nor will they grieve. (Surah Al-Ahqaf 46:13)"
+        },
+        {
+            arabic: "إِنَّمَا يُؤْمِنُ بِآيَٰتِىٓ إِلَّا ٱلَّذِينَٓ إِذَا ذُكِّرُوا۟ بِهَا خَرُّوا۟ سُجَّدًۭا وَسَبَّحُوا۟ بِحَمۡدِ رَبِّهِمْ وَهُمْ لَا يَسۡتَكۡبِرُونَ",
+            bangla: "আমার আয়াতগুলির প্রতি বিশ্বাস রাখেন তারা যারা যখন সেগুলি স্মরণ করা হয়, তারা সিজদাহ করে এবং তাদের প্রভুর প্রশংসায় স্তবগান করে, এবং তারা গর্বিত হয় না।",
+            english: "None believe in Our verses except those who, when they are reminded of them, fall down in prostration and glorify [Allah] with praise of their Lord, and they are not arrogant. (Surah As-Sajda 32:15)"
+        },
+        {
+            arabic: "وَجَزَٰؤُا۟آ مُحۡسِنِينَۗ وَاِذَا قَالَ لَهُۥٓ رَبُّهُۥ لَا تَحۡزَنٓ إِنَّ ٱللَّهَ مَعَنَا",
+            bangla: "এবং তাদের পুরস্কৃত করা হয় তাদের ভাল কাজের জন্য। এবং যখন তাদের প্রভু তাদের বললেন, ‘দুঃখিত হবেন না, নিশ্চয় আল্লাহ আমাদের সাথে আছেন।’",
+            english: "And the reward for the doers of good is [the] best, and when their Lord said to them, 'Do not grieve, indeed Allah is with us.' (Surah At-Tawbah 9:40)"
+        }
+    ],
+    regretful: [
+        {
+            arabic: "قَالَ رَبُّنَآ أَمَتَّنَا ٱثْنَتَيْنِ وَأَحْيَيْتَنَآ ثَنتَيْنِۖ فَاعْتَرَفْنَا بِذُنُوبِنَا فَهَلْ إِلَىٰ مِّن سَبِيلٍۢ",
+            bangla: "তিনি বললেন, 'আমরা আপনাকে দুটি মৃত্যুর মধ্য দিয়ে প্রলম্বিত করেছি এবং দুটি জীবনের মধ্য দিয়ে ফিরিয়ে দিয়েছি। অতএব আমরা আমাদের পাপ স্বীকার করি, এখন কি আমাদের জন্য কোনো উপায় আছে?'",
+            english: "He will say, 'Our Lord, You have caused us to die twice and You have given us life twice. So we confess our sins. Is there to any way to [escape]?' (Surah Ghafir 40:11)"
+        },
+        {
+            arabic: "يَا حَسْرَتَا عَلَىٰ مَا فَرَّطْتُ فِي جَانِبِ ٱللَّهِ وَإِن كُنتُ لَمِنَ ٱلسَّٰخِرِينَ",
+            bangla: "হায়! আমি আল্লাহর পথে যে অবহেলা করেছি তার জন্য! আমি তো সৃষ্টিকর্তার সাথে তামাশা করেছিলাম।",
+            english: "Oh, woe is me! I was indeed among the mockers. (Surah Az-Zumar 39:56)"
+        },
+        {
+            arabic: "وَقَالَ ٱلَّذِينَ فِى ٱلنَّارِ لِلۡخَزَنَةِ ٱدْعُوا۟ رَبَّكُمْ يَخَفِّفْ عَنَّا يَوْمًاۖ قَالُوا۟ أَوَلَمْ تَأْتِكُمْ رُسُلُكُم بِٱلۡبَيِّنَٰتِ",
+            bangla: "এবং আগুনে যারা ছিল, তারা বলেছিল, 'তোমরা আমাদের রবের কাছে দোয়া করো, যেন আমাদের উপর এক দিন তীব্র শাস্তি কমানো হয়।' তারা বলেছিল, 'তোমাদের কাছে কি পরিষ্কার প্রমাণ নিয়ে রসুল আসেননি?'",
+            english: "And those in the Fire will call to the keepers of Hell, 'Invoke your Lord to lighten for us the punishment for a day.' They will say, 'Did there not come to you your messengers with clear proofs?' (Surah Al-Mulk 67:10)"
+        },
+        {
+            arabic: "وَٱلَّذِينَ فِي ٱلۡمَغۡرِبِينَ فَقَضَوْا۟ فِي قُدُورِهِمْ فِيهَاۖ فَذُوقُوا۟ بِمَا نَسِيۡتُمْ لِقَآءَ يَوْمِكُمْۖ إِنَّا نَسِينَٰكُمْ",
+            bangla: "আর যারা খারাপ কাজ করেছে, তারা বলেছিল, 'আমরা কি আর তা করতে পারব না?' বলুন, 'না, আপনি যদি আল্লাহকে স্মরণ না করতেন, তবে আপনারা তা জানতেন না।",
+            english: "And those who wronged will be in the Fire, with the punishment of their deeds. (Surah As-Sajda 32:14)"
+        },
+        {
+            arabic: "وَيَوْمَ يَعَضُّ ٱلظَّٰلِمُ عَلَىٰ يَدَيْهِۦ يَقُولُ يٰلَيۡتَنِىٓ اتَّخَذْتُ مَعَ ٱلرَّسُولِ سَبِيلًۭا",
+            bangla: "আর সেই দিন ظالم তার হাতে কামড় দিয়ে বলবে, 'হায়! আমি রাসূলের সাথে পথনির্দেশন গ্রহণ করতাম।",
+            english: "And the Day the wrongdoer will bite his hands and say, 'Oh, I wish I had taken a way with the Messenger. (Surah Al-Furqan 25:27)"
+        },
+        {
+            arabic: "وَلَوۡ أَنَّنَآ أَنزَلْنَآ إِلَيِهِمْ مَّلَائِكَةًۭ وَكَانُوا۟ مَعَهُۥ لَحَتَىٰ يَرَوْنَ اللَّهَ فَرَجَعُوا۟ لَحَتَّىٰ نَعُودَ فِي هِمْ رَحْمَةَ",
+            bangla: "যদি আমরা তাদের উপর ফেরেশতা পাঠাতাম এবং তারা আল্লাহর স্বাক্ষর পেত, তবুও তারা ঈমান আনতে পরিস্কার প্রমাণ পেত না।",
+            english: "And if We had sent down to them angels and the dead spoke to them, and We gathered together all things before them, they would still not have believed unless Allah willed. (Surah An’am 6:111)"
+        }
+    ],
+    satisfied: [
+        {
+            arabic: "وَلَقَدْ رَضِيَ ٱللَّهُ عَنْهُمْ وَرَضُوا۟ عَنْهُ ۚ ذَٰلِكَ لِمَنْ خَشِىَ رَبَّهُۥ",
+            bangla: "এবং আল্লাহ তাদের উপর সন্তুষ্ট এবং তারা আল্লাহর উপর সন্তুষ্ট। এটি তাদের জন্য যারা তাদের রবের সম্মান পায়।",
+            english: "And Allah is pleased with them, and they are pleased with Him. That is for those who fear their Lord. (Surah Al-Bayyina 98:8)"
+        },
+        {
+            arabic: "إِنَّ رَحْمَتَ ٱللَّهِ قَرِيبٌۭ مِّنَ ٱلۡمُحۡسِنِينَ",
+            bangla: "নিশ্চয়ই আল্লাহর দয়া সৎকর্মীদের কাছাকাছি।",
+            english: "Indeed, the mercy of Allah is near to the doers of good. (Surah Al-A'raf 7:56)"
+        },
+        {
+            arabic: "وَٱلۡجَنَّةَ وَمَا فِيهَا مِنْ شَىْءٍۢ فَإِنَّمَا جَزَآؤُهُمْ بِمَا كَانُوا۟ يَعْمَلُونَ",
+            bangla: "এবং জান্নাত এবং তাতে যা কিছু রয়েছে, তা তাদের পুরস্কার, যা তারা করেছিল।",
+            english: "And paradise and whatever is in it is their reward for what they used to do. (Surah As-Sajda 32:17)"
+        },
+        {
+            arabic: "وَمَنۡ يُطِعِ ٱللَّهَ وَرَسُولَهُۥ وَيَخْشَ ٱللَّهَ وَيَتَّقْهِ فَأُو۟لَـٰٓئِكَ هُمُ ٱلۡفَائِزُونَ",
+            bangla: "যে আল্লাহর এবং তাঁর রসূলের আদেশ মেনে চলে এবং আল্লাহকে ভয় করে এবং তাঁর ভয় থেকে বাঁচে, তারা একমাত্র সফলকাম।",
+            english: "And whoever obeys Allah and His Messenger and fears Allah and is conscious of Him, it is those who are the successful. (Surah An-Nur 24:52)"
+        },
+        {
+            arabic: "إِنَّۦۤ أَتۡيَتُۥٓ بِمَآ تَأْمُرُونَۖ إِنَّا لَمُتَّبِعُونَ ۚ قَالُوا۟ يَا لَآئِكَ فِي النَّفُوسِ",
+            bangla: "আমি তোমাদের নির্দেশ অনুযায়ী সব করেছি, তোমরা কি এর জন্য জান্নাত পেয়েছো?",
+            english: "Indeed, I have brought what you ordered. Did you receive the paradise for this? (Surah At-Tawba 9:111)"
+        },
+        {
+            arabic: "قَالَ رَبُّنَا وَمَنۡ سَٰئِلُهُۥ أَبَانَاۓوُۭ",
+            bangla: "বলুন, আমার রব জান্নাতের উপর সন্তুষ্ট।",
+            english: "Say, 'My Lord is pleased with the believers.' (Surah Al-Kahf 18:10)"
+        }
+    ],
+    uncertain: [
+        {
+            arabic: "فَإِنَّ مَعَ ٱلۡعُسۡرِ يُسۡرًا",
+            bangla: "নিশ্চয়ই, দুশ্চিন্তার সাথে সহজতা রয়েছে।",
+            english: "For indeed, with hardship [will be] ease. (Surah Ash-Sharh 94:6)"
+        },
+        {
+            arabic: "وَعَسَىٰٓ أَن تَكْرَهُوا۟ شَىًْۭٔا وَهُوَ خَيْرٌۭ لَّكُمْ",
+            bangla: "এবং সম্ভবত তুমি এমন কিছু কিছু অপছন্দ করো, যা তোমার জন্য ভালো।",
+            english: "And perhaps you dislike something, but it is good for you. (Surah Al-Baqarah 2:216)"
+        },
+        {
+            arabic: "وَٱللَّهُ خَيۡرٌۭ حَٰفِظًۭا وَهُوَ أَرْحَمُ ٱلرَّٰحِمِينَ",
+            bangla: "এবং আল্লাহ সর্বোত্তম রক্ষাকারী, এবং তিনি সর্বশ্রেষ্ঠ দয়ালু।",
+            english: "And Allah is the best of protectors, and He is the most merciful of the merciful. (Surah Yusuf 12:64)"
+        },
+        {
+            arabic: "إِنَّ ٱللَّهَ مَعَنَا",
+            bangla: "নিশ্চয়ই আল্লাহ আমাদের সাথে আছেন।",
+            english: "Indeed, Allah is with us. (Surah At-Tawbah 9:40)"
+        },
+        {
+            arabic: "قَالَ رَبُّنَا فَٱغۡفِرْ لَنَا ذُنُوبَنَا وَكَفِّرْ عَنَّا سَيِّئَٰتِنَا وَتَوَفَّنَا مَعَ ٱلۡأَبۡرَارِ",
+            bangla: "বলুন, আমাদের রব, আমাদের পাপগুলো মাফ করুন, আমাদের দুশ্চিন্তা দূর করুন এবং আমাদের ভালো মানুষের সাথে মৃত্যু দিন।",
+            english: "They said, 'Our Lord, forgive us our sins and remove from us our misdeeds and take us to Yourself with the righteous.' (Surah Al-Imran 3:193)"
+        },
+        {
+            arabic: "وَقَالَ رَبُّكُمُ ٱدْعُونِىٓ أَسْتَجِبْ لَكُمْ",
+            bangla: "তোমাদের রব বললেন, আমাকে ডাকার মাধ্যমে আমি তোমাদের সাহায্য করব।",
+            english: "And your Lord says, 'Call upon Me; I will respond to you.' (Surah Ghafir 40:60)"
+        }
+    ],
+    uneasy: [
+        {
+            arabic: "وَمَاۤ أَصَابَكُم مِّن مُّصِيبَةٍۢ فَبِمَا كَسَبَتْ أَيْدِيكُمْ وَيَعْفُوا۟ عَن كَثِيرٍ",
+            bangla: "এবং তোমাদের উপর যে কোন বিপদ আসে তা তোমাদের নিজেদের হাতের কাজের কারণে। আর তিনি অনেক কিছু মাফ করেন।",
+            english: "And whatever strikes you of disaster - it is for what your hands have earned; but He pardons much. (Surah Ash-Shura 42:30)"
+        },
+        {
+            arabic: "إِنَّمَا يُؤْمِنُ بِآيَٰتِى الَّذِينَ إِذَا ذُكِّرُوا۟ بِهَا خَرُّوا۟ سُجَّدًا وَسَبَّحُوا۟ بِحَمْدِ رَبِّهِمْ وَهُمْ لَا يَسْتَكْبِرُونَ",
+            bangla: "আমার নিদর্শনাবলী সম্পর্কে যারা বিশ্বাস করে, তারা যখন তাতে উপদেশ প্রাপ্ত হয়, তারা সেজদা করে এবং তাদের রবের প্রশংসায় তাসবীহ করে। তারা অহংকার করে না।",
+            english: "Only those believe in Our verses who, when they are reminded by them, fall down in prostration and glorify [Allah's] praise, and they are not arrogant. (Surah As-Sajdah 32:15)"
+        },
+        {
+            arabic: "إِنَّا مَعَكَ فَصَبِرْ وَبَشِّرِ ٱلْمُؤْمِنِينَ",
+            bangla: "নিশ্চয়ই আমরা তোমার সাথে আছি, অতএব ধৈর্য ধারণ করো এবং বিশ্বাসীদের সুসংবাদ দাও।",
+            english: "Indeed, We are with you, so be patient and give good tidings to the believers. (Surah Al-Anfal 8:46)"
+        },
+        {
+            arabic: "وَمَا جَعَلْنَا لِبَشَرٍۢ مِّن قَبْلِكَ إِلَّآ رِجَالًۭا نُّوحِىٓ إِلَيْهِمْ فَسْـَٔلُوا۟ أَهْلَ ٱلذِّكْرِ إِن كُنتُمْ لَا تَعْلَمُونَ",
+            bangla: "আমরা তোমার আগে কোনো মানবকে পাঠাইনি, শুধু পুরুষদেরই পাঠিয়েছি, তাদের কাছে আমরা ওহী প্রেরণ করেছি, সুতরাং যদি তোমরা না জানো, তাহলে জিজ্ঞেস করো সেই জ্ঞানীদের।",
+            english: "And We did not send before you except men to whom We revealed [the message], so ask the people of the message if you do not know. (Surah Al-Anbiya 21:7)"
+        },
+        {
+            arabic: "إِنَّ رَبَّكَ وَقَّابُ ٱلۡعَذَابِ وَإِنَّهُۥ لَغَفُورٌۭ رَّحِيمٌۭ",
+            bangla: "নিশ্চয়ই তোমার রব শাস্তি দানে অত্যন্ত শক্তিশালী এবং তিনি অবশ্যই দয়ালু, ক্ষমাশীল।",
+            english: "Indeed, your Lord is a possessor of forgiveness and He is full of mercy. (Surah Al-Buruj 85:14)"
+        },
+        {
+            arabic: "وَمَا يَظُنُّۭ بُكُمْ رَبُّكُمۡ إِذَا تَدْعُونَ رَحْمَتِهِۦۚ وَلَٰٓكِنْ لِتُؤْمِنُوا۟ بِهِۦۚ وَإِنَّ رَبَّكُمْ وَاعِدُكُمْۚ فَذُوقُوا۟ۚ وَإِنَّمَا تُدْرَكُونَ بِهِۦۚ وَإِنَّمَا إِلَىٰٓ رَبِّكُمْ تَحْشُرُونَ",
+            bangla: "তোমরা যখন তাঁর রহমত কামনা করবে তখন তোমার রব কি মনে করবে, কিন্তু তোমরা বিশ্বাস করো। এবং নিশ্চয়ই তোমাদের রব তোমাদের প্রতিশ্রুতি দিয়েছেন। অতএব তা ভোগ করো, আর তোমরা শুধু তোমাদের রবের কাছে ফিরিয়ে আনা হবে।",
+            english: "What does your Lord think of you when you invoke His mercy? But you must believe in Him, and your Lord has promised you. So taste it, and you will only be returned to your Lord. (Surah Al-Mulk 67: 29)"
+        }
+    ],
+    weak: [
+        {
+            arabic: "وَقَالَ رَبُّكُمُ ٱدْعُونِىٓ أَسْتَجِبْ لَكُمْ إِنَّ ٱلَّذِينَ يَسْتَكْبِرُونَ عَنْ عِبَادَتِى سَيَدْخُلُونَ جَهَنَّمَ دَاخِرِينَ",
+            bangla: "আর তোমাদের রব বলেছেন, আমাকে ডাকো, আমি তোমাদেরকে সাড়া দিবো। নিঃসন্দেহে যারা আমার ইবাদত করতে অস্বীকার করে তারা লজ্জিতভাবে জাহান্নামে প্রবেশ করবে।",
+            english: "And your Lord says, 'Call upon Me; I will respond to you. Indeed, those who disdain My worship will enter Hell in humiliation.' (Surah Ghafir 40:60)"
+        },
+        {
+            arabic: "وَمَن يَتَّقِ ٱللَّهَ يَجْعَلْ لَهُۥ مَخْرَجًۭا وَيَرْزُقْهُ مِنْ حَيْثُ لَا يَحْتَسِبُ",
+            bangla: "আর যে আল্লাহকে ভয় করবে, আল্লাহ তার জন্য পথ বের করে দেবেন এবং তাকে এমন স্থান থেকে রিজিক দেবেন যা সে কল্পনাও করবে না।",
+            english: "And whoever fears Allah - He will make a way for him to get out [from every difficulty] and will provide him from where he does not expect. (Surah At-Talaq 65:2-3)"
+        },
+        {
+            arabic: "وَمَا النَّصْرُ إِلَّا مِنْ عِندِ ٱللَّهِ ۚ إِنَّ ٱللَّهَ عَزِيزٌۭ حَكِيمٌۭ",
+            bangla: "আর সাহায্য আল্লাহর কাছ থেকে ছাড়া অন্য কোথাও থেকে আসে না। নিশ্চয়ই আল্লাহ পরাক্রমী, প্রজ্ঞাময়।",
+            english: "And victory is not except from Allah. Indeed, Allah is Exalted in Might and Wise. (Surah Aal-E-Imran 3:126)"
+        },
+        {
+            arabic: "وَعَلَىٰٓ مَنْ يَفْتَحُ اللَّمْحَةَ فَإِنَّا نُحْيِهِۦۚ وَإِنَّا عَلَىٰٓ سَارِعُونَ",
+            bangla: "তবে যে ব্যক্তি নিজের দুঃখ কষ্ট প্রকাশ করবে, তবে আমি তার জন্য জীবিত দেব। আমি তাড়াতাড়ি আমার পথপ্রদর্শন দেব।",
+            english: "But whoever opens his heart to seeking help, We will certainly give him help and guidance. (Surah Az-Zumar 39:53)"
+        },
+        {
+            arabic: "لَا يُكَلِّفُ ٱللَّهُ نَفْسًۭا إِلَّا وُسْعَهَا",
+            bangla: "আল্লাহ কারো উপর তার ক্ষমতার বাইরে কিছু চাপিয়ে দেন না।",
+            english: "Allah does not burden a soul beyond that it can bear. (Surah Al-Baqarah 2:286)"
+        }
+    ]
+    
+        };
+
+        function displayVerses() {
+            const mood = document.getElementById("mood-selector").value;
+            const container = document.getElementById("verses-container");
+
+            if (verses[mood]) {
+                container.innerHTML = verses[mood]
+                    .map(verse => `
+                        <div class="verse">
+                            <p class="arabic">${verse.arabic}</p>
+                            <p class="translation">${verse.bangla}</p>
+                            <p class="translation">${verse.english}</p>
+                        </div>
+                    `)
+                    .join('');
+            } else {
+                container.innerHTML = "<p>No verses available for this mood yet.</p>";
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://afzalismailsakif.github.io/think-islamic/sitemap.xml

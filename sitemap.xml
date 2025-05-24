@@ -6,8 +6,7 @@
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
-  <!-- Add more URLs here if you have multiple pages -->
-  <!-- Example:
+  
   <url>
     <loc>https://afzalismailsakif.github.io/think-islamic/hadith.html</loc>
     <lastmod>2025-05-24</lastmod>
@@ -28,5 +27,5 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
-  -->
+  
 </urlset>
